@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "新悦读",
+    "description": "移动端App开发满足Android平台，对二维码扫描功能，实现对各书刊视频等资源的统一集中管理，简捷管理读者学习与理解重点难点原理、知识及其微课观看。",
+    "slug": "NewReader",
+    "version": "1.0.0",
+    "sdkVersion": "25.0.0",
+    "orientation": "portrait",
+    "primaryColor": "#ccc",
+    "icon": "",
+    "ios": {
+      "bundleIdentifier": "nickj.chang.newReader"
+    },
+    "android": {
+      "package": "nickj.chang.newReader"
+    },
+    "androidStatusBar": {
+      "backgroundColor": "#fff"
+    }
+  }
+}

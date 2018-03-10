@@ -1,99 +1,97 @@
 import React from 'react';
-import { Platform, Button } from 'react-native';
-import { StackNavigator, TabNavigator } from 'react-navigation';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Platform } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { TabNavigator, TabBarBottom } from 'react-navigation';
 
-import HomeView from './views/Home' // 主页
-import FindView from './views/Find' // 发现
-import NoteView from './views/Note' // 笔记
-import ProfileView from './views/Profile' // 我的
+import Colors from '../constants/Colors';
 
-// 底部 Tab 标签导航
-export default TabNav = TabNavigator(
+import HomeView from '../views/Home' // 主页
+import FindView from '../views/Find' // 发现
+import NoteView from '../views/Note' // 笔记
+import ProfileView from '../views/Profile' // 我的
+
+export default TabNavigator(
     {
         MainTab: {
             screen: HomeView,
-            path: '/',
             navigationOptions: {
-                title: '主页',
-                tabBarLabel: '主页',  // 底部 title
-                headerStyle: {
-                    backgroundColor: '#0096ff',
-                },
+                title: '首页',
+                tabBarLabel: '首页',  // 底部 title
                 headerTintColor: '#ffffff',
                 tabBarIcon: ({ tintColor, focused }) => (
                     <Ionicons
-                        name={focused ? 'ios-home' : 'ios-home-outline'}
+                        name={Platform.OS === 'ios'
+                            ? `ios-home${focused ? '' : '-outline'}`
+                            : 'md-home'}
                         size={26}
                         style={{ color: tintColor }}
                     />
                 ),
-            },
+            }
         },
         FindTab: {
             screen: FindView,
-            path: '/',
             navigationOptions: {
                 title: '发现',
                 tabBarLabel: '发现',
-                headerStyle: {
-                    backgroundColor: '#0096ff'
-                },
                 headerTintColor: '#ffffff',
                 tabBarIcon: ({ tintColor, focused }) => (
                     <Ionicons
-                        name={focused ? 'ios-compass' : 'ios-compass-outline'}
+                        name={Platform.OS === 'ios'
+                            ? `ios-compass${focused ? '' : '-outline'}`
+                            : 'md-compass'}
                         size={26}
                         style={{ color: tintColor }}
                     />
                 ),
-            },
+            }
         },
         NoteTab: {
             screen: NoteView,
-            path: '/',
             navigationOptions: {
-                title: '学习',
-                tabBarLabel: '学习',
-                headerStyle: {
-                    backgroundColor: '#0096ff'
-                },
+                title: '笔记',
+                tabBarLabel: '笔记',
                 headerTintColor: '#ffffff',
                 tabBarIcon: ({ tintColor, focused }) => (
                     <Ionicons
-                        name={focused ? 'ios-list-box' : 'ios-list-box-outline'}
+                        name={ Platform.OS === 'ios'
+                            ? `ios-create${focused ? '' : '-outline'}`
+                            : 'md-create'}
                         size={26}
                         style={{ color: tintColor }}
                     />
                 ),
-            },
+            }
         },
         ProfileTab: {
             screen: ProfileView,
-            path: '/',
             navigationOptions: {
                 title: '我的',
                 tabBarLabel: '我的',
-                headerStyle: {
-                    backgroundColor: '#0096ff'
-                },
                 headerTintColor: '#ffffff',
                 tabBarIcon: ({ tintColor, focused }) => (
                     <Ionicons
-                        name={focused ? 'ios-contact' : 'ios-contact-outline'}
+                        name={Platform.OS === 'ios'
+                            ? `ios-contact${focused ? '' : '-outline'}`
+                            : 'md-contact'}
                         size={26}
                         style={{ color: tintColor }}
                     />
                 ),
-            },
+            }
         },
     },
     {
+        navigationOptions: ({ navigation }) => ({
+            tabBarIcon: ({ focused }) => {
+            },
+        }),
+        tabBarComponent: TabBarBottom,
         tabBarPosition: 'bottom',
         animationEnabled: false,
         swipeEnabled: false,
         tabBarOptions: {
-            activeTintColor:  Platform.OS === 'android' ? '#fff' :'#0096ff',
+            activeTintColor: Platform.OS === 'android' ? '#fff' : '#0096ff',
         }
     }
 );

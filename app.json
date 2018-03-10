@@ -7,7 +7,12 @@
     "sdkVersion": "25.0.0",
     "orientation": "portrait",
     "primaryColor": "#ccc",
-    "icon": "",
+    "icon": "./src/assets/images/ic_launcher.png",
+    "splash": {
+      "image": "./src/assets/images/ic_launcher-web.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "ios": {
       "bundleIdentifier": "nickj.chang.newReader"
     },

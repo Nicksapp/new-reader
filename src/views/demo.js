@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, Image } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
-export default FindView = ({ navigation }) => {
+export default DemoView = ({ navigation }) => {
     return (
         <View style={styles.container}>
-            <Text>FindView</Text>
+            <Text>DemoView</Text>
         </View>
     )
 }
@@ -18,4 +18,3 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 });
-

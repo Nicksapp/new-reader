@@ -1,72 +1,59 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
-export default ListItemHome = () => {
+export default ListItemHome = (props) => {
     return (
-        <View style={styles.cellContainer}>
-            <View style={{ width: 70, height: 70 }}>
-                <Image style={{ width: 70, height: 70, borderRadius: 3 }} source={{ uri: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1520615354536&di=34b4cc89b070209a88a9b7429b5e104b&imgtype=0&src=http%3A%2F%2Fimg.qi-che.com%2Fuploads%2F170123%2F321_135229_1.png' }}></Image>
-            </View>
-            <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', marginLeft: 10 }}>
+        <TouchableOpacity activeOpacity={1} onPress={props.onListClick}>
+            <View style={styles.cellContainer}>
                 <View style={styles.rowFlex}>
-                    <Text style={styles.tag01}>品牌</Text>
-                    <Text style={styles.textTitle}>食欲中西简餐</Text>
-                </View>
-
-                <View style={{ flexDirection: 'row' }}>
-                    {/* <Star /> */}
-                    <Text style={[styles.textRed, { marginLeft: 10 }]}>4.4</Text>
-                    <Text style={[styles.textGrey, { fontSize: 11, marginLeft: 5, top: 2 }]}>月售516单</Text>
-                </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={[styles.textGrey, styles.textSizeMid]}>￥30起送 / 配送费￥3 </Text>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Text style={[styles.textLightGrey, styles.textSizeMid]}>855m / </Text>
-                        <Text style={[styles.textBlue, styles.textSizeMid]}>48分钟</Text>
+                    <View style={{ flex: 3 }}>
+                        <Text style={styles.mainTitle}>{props.mainTitle}</Text>
+                        <Text style={styles.descTitle} numberOfLines={2}>{props.descTitle}</Text>
+                    </View>
+                    <View style={{ flex: 1, marginLeft: 12, justifyContent: 'space-between' }}>
+                        <Image style={{ resizeMode: 'contain', flex: 1 }} source={{ uri: props.imgUrl }}></Image>
                     </View>
                 </View>
+                <View style={[styles.rowFlex, styles.spaceBetween, styles.bottomSection]}>
+                    <Text style={styles.bottomText}>作者: {props.author}</Text>
+                    <Text style={styles.bottomText}>{props.label}</Text>
+                </View>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 
 const styles = StyleSheet.create({
     cellContainer: {
-        flexDirection: 'row',
-        height: 100,
         paddingTop: 15,
         paddingBottom: 15,
-        paddingLeft: 5,
-        paddingRight: 5,
+        paddingLeft: 10,
+        paddingRight: 10,
         borderBottomColor: '#eee',
         borderBottomWidth: .5,
     },
     rowFlex: {
         flexDirection: 'row'
     },
-    textRed: {
-        color: '#ff6000'
+    spaceBetween: {
+        justifyContent: 'space-between'
     },
-    textGrey: {
-        color: '#666'
-    },
-    textBlue: {
-        color: '#3190e8'
-    },
-    textLightGrey: {
-        color: '#999'
-    },
-    textSizeMid: {
-        fontSize: 12
-    },
-    tag01: {
+    mainTitle: {
+        fontSize: 20,
+        fontWeight: '400',
         color: '#000',
-        backgroundColor: '#ffd930',
-        fontWeight: '500',
-        paddingTop: 1,
-        paddingBottom: 1,
-        paddingLeft: 3,
-        paddingRight: 3,
-        marginRight: 3,
-    }
+        marginBottom: 5
+    },
+    descTitle: {
+        fontWeight: '300',
+        color: '#666',
+        lineHeight: 24
+    },
+    bottomSection: {
+        marginTop: 5
+    },
+    bottomText: {
+        color: '#999',
+        fontWeight: '200'
+    },
 })

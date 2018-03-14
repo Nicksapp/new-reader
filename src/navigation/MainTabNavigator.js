@@ -5,10 +5,10 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 
 import Colors from '../constants/Colors';
 
-import HomeView from '../views/Home' // 主页
-import FindView from '../views/Find' // 发现
-import NoteView from '../views/Note' // 笔记
-import ProfileView from '../views/Profile' // 我的
+import HomeView from '../views/Home/Home' // 主页
+import FindView from '../views/Find/Find' // 发现
+import NoteView from '../views/Note/Note' // 笔记
+import ProfileView from '../views/Profile/profile' // 我的
 
 export default TabNavigator(
     {
@@ -18,6 +18,7 @@ export default TabNavigator(
                 title: '首页',
                 tabBarLabel: '首页',  // 底部 title
                 headerTintColor: '#ffffff',
+                header: null,
                 tabBarIcon: ({ tintColor, focused }) => (
                     <Ionicons
                         name={Platform.OS === 'ios'
@@ -91,7 +92,7 @@ export default TabNavigator(
         animationEnabled: false,
         swipeEnabled: false,
         tabBarOptions: {
-            activeTintColor: Platform.OS === 'android' ? '#fff' : '#0096ff',
+            activeTintColor: '#0096ff',
         }
     }
 );

@@ -8,13 +8,18 @@ import MainTabNavigator from './MainTabNavigator';
 import Scan from '../views/Scan'
 import Demo from '../views/demo'
 import Camera from '../components/camera'
+import Search from '../views/Search'
+import articleDetail from '../views/Detail/articleDetail'
+import itemDetail from '../views/Detail/itemDetail'
+import Login from '../views/Login/login'
+import Regisiter from '../views/Login/regisiter'
 
 const RootStackNavigator = StackNavigator(
     {
         Main: {
             screen: MainTabNavigator,
         },
-        ScanView: {  // 测试 导航页
+        ScanView: {  
             screen: Scan,
             navigationOptions: {
                 title: '扫描二维码',
@@ -24,6 +29,39 @@ const RootStackNavigator = StackNavigator(
                 headerTintColor: '#ffffff',
             },
         },
+        DetailView: {  
+            screen: articleDetail,
+            navigationOptions: {
+                title: '详情',
+                header: null
+            },
+        },
+        ItemDetaillView: {  
+            screen: itemDetail,
+            navigationOptions: {
+                title: '详情',
+                header: null
+            },
+        },
+        SearchView: {  
+            screen: Search,
+            navigationOptions: {
+                header: null
+            },
+        },
+        LoginView: {  
+            screen: Login,
+            navigationOptions: {
+                header: null
+            },
+        },
+        RegisiterView: {  
+            screen: Regisiter,
+            navigationOptions: {
+                header: null
+            },
+        },
+
         DemoView: {  // 测试 导航页
             screen: Demo,
             navigationOptions: {

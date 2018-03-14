@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 
 export default RegisiterView = ({ navigation }) => {
 
@@ -57,8 +57,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#e9eaec',
         paddingLeft: 10,
-        paddingTop: 5,
-        paddingBottom: 5
+        paddingTop: 10,
+        paddingBottom: 10
     },
     inputFirst: {
         borderBottomWidth: 0,
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     loginBtn: {
         flex: 1,
         backgroundColor: '#0096ff',
-        padding: 10,
+        padding: 13,
         alignItems: 'center',
         borderRadius: 5,
     }

@@ -17,7 +17,7 @@ export default class HomeView extends React.Component {
     }
 
     componentWillMount() {
-        this.props.navigation.navigate('ItemDetaillView')
+        // this.props.navigation.navigate('ItemDetaillView')
     }
 
     _onRefresh = () => {

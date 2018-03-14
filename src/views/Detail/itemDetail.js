@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import CommentItem from '../../components/commentItem'
+import Star from '../../components/star'
 
 export default class ItemDetail extends React.Component {
     constructor(props) {
@@ -14,7 +16,7 @@ export default class ItemDetail extends React.Component {
 
     render() {
         return (
-            <View>
+            <View style={{ backgroundColor: '#eeeeee'}}>
                 <ScrollView>
                     <View style={styles.headerImage}>
                         <Image style={styles.mainImage} source={{ uri: 'https://img3.doubanio.com/lpic/s29699274.jpg'}}></Image>
@@ -23,7 +25,7 @@ export default class ItemDetail extends React.Component {
                         <View style={{borderBottomWidth: 0.5, borderBottomColor: '#e0e0e0', paddingBottom: 15}}>
                             <View style={styles.mainTitle}>
                                 <View>
-                                    <Text style={{fontSize: 20, fontWeight: '500', color: '#333'}}>远见</Text>
+                                    <Text style={{fontSize: 20, fontWeight: '600', color: '#333'}}>远见</Text>
                                     <Text style={{color: '#616161', marginTop: 5}}>如何规划职业生涯3大阶段</Text>
                                     <View style={{marginTop: 10}}>
                                         <Text style={styles.titleInfo}>作者：[美]布莱恩·费瑟思通豪</Text>
@@ -34,7 +36,7 @@ export default class ItemDetail extends React.Component {
                                 <View style={styles.pointCard}>
                                     <Text style={styles.titleInfo}>豆瓣评分</Text>
                                     <Text style={{fontSize: 20, fontWeight: '500', color: '#333'}}>8.0</Text>
-                                    {/* <Text style={{fontSize: 14}}>xxxxxx</Text> */}
+                                    <Star stars="8.0"/>
                                     <Text style={{fontSize: 11, color: '#616161'}}>169人</Text>
                                 </View>
                             </View>
@@ -63,7 +65,7 @@ export default class ItemDetail extends React.Component {
                             </TouchableOpacity>
                         </View>
                         <View style={styles.mainInfo}>
-                            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5}}>
                                 <Text style={styles.mainInfoTitle}>读书笔记</Text>
                                 <TouchableOpacity 
                                     style={styles.miniBtn}
@@ -75,8 +77,7 @@ export default class ItemDetail extends React.Component {
                             <ScrollView
                                 horizontal={true}
                                 automaticallyAdjustContentInsets={false}
-                                showsHorizontalScrollIndicator={false}
-                                style={styles.noteScrollView}>
+                                showsHorizontalScrollIndicator={false}>
                                 <View style={styles.noteCard}>
                                     <Text style={{fontSize: 13, fontWeight: '500', color: '#333'}}>第一页</Text>
                                     <Text style={{fontSize: 12, color: '#424242', marginTop: 5 ,marginBottom: 5}} numberOfLines={4}>所擅长的，所热爱的，这个世界所需要的三大让廖访问量您访问分为范围你发了五年范围看哪个方位开关文革我看那个翁老翁范围来看给你热快乐那个个人干呢人来看过呢人看过呢，废物废物各位个人人格二哥</Text>
@@ -108,6 +109,27 @@ export default class ItemDetail extends React.Component {
                                     </View>
                                 </View>
                             </ScrollView>
+                        </View>
+                    </View>
+
+                    <View style={styles.commentSection}>
+                        <View style={styles.commentBar}>
+                            <Text style={{fontSize: 16, fontWeight: '200', color: '#424242'}}>评论</Text>
+                        </View>
+                        <View>
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 20}}>
+                                <Text style={styles.mainInfoTitle}>短评</Text>
+                                <TouchableOpacity 
+                                    style={styles.miniBtn}
+                                    activeOpacity={1} onPress={() => Alert.alert('暂未开放')}>
+                                    <Text style={{color: '#43a047', fontSize: 12}}>写短评</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View>
+                                <CommentItem />
+                                <CommentItem />
+                                <CommentItem />
+                            </View>
                         </View>
                     </View>
                 </ScrollView>
@@ -146,11 +168,11 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
         shadowColor: '#000',
         shadowOffset: {
-            height:10,
-            width:10
+            height: 3,
+            width: 10
         },
-        shadowRadius:3,
-        shadowOpacity:0.8,
+        shadowRadius: 5,
+        shadowOpacity: 0.15,
     },
     mainTitle: {
         marginTop: 20,
@@ -192,9 +214,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    noteScrollView: {
-
-    },
     noteCard: {
         padding: 10,
         backgroundColor: '#fff',
@@ -208,6 +227,17 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#43a047',
         borderRadius: 3,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    commentSection: {
+        marginTop: 20
+    },
+    commentBar: {
+        flexDirection: 'row',
+        flex: 1,
+        height: 40,
+        backgroundColor: '#e0e0e0',
         justifyContent: 'center',
         alignItems: 'center',
     }

@@ -1,40 +1,92 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { registerUser } from '../../utils/lib'
+import { defaultAlert } from '../../utils/utils'
+import Loading from '../../components/loading'
 
-export default RegisiterView = ({ navigation }) => {
+export default class RegisiterView extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            email: '',
+            password: '',
+            username: '',
+            loading: false,
+        }
+    }
+    render() {
+        return (
+            <View style={styles.container}>
+                {
+                    this.state.loading ? (<Loading /> ) : (null)
+                }
+                <Text style={styles.loginTitle}>欢迎加入新悦读</Text>
+                <View style={{ marginTop: 30, flexDirection: 'row' }}>
+                    <TextInput 
+                        value={this.state.email}
+                        onChangeText={(email) => this.setState({ email })}
+                        style={[styles.loginInput, styles.inputFirst]} 
+                        multiline={false} 
+                        placeholder="邮箱" 
+                        keyboardType="email-address"
+                        underlineColorAndroid="transparent"></TextInput>
+                </View>
+                <View style={{ flexDirection: 'row' }}>
+                    <TextInput 
+                        value={this.state.password}
+                        onChangeText={(password) => this.setState({ password })}
+                        style={[styles.loginInput, styles.inputSecond]} 
+                        multiline={false} 
+                        placeholder="密码" 
+                        secureTextEntry={true} 
+                        underlineColorAndroid="transparent"></TextInput>
+                </View>
+                <View style={{ marginBottom: 10, flexDirection: 'row' }}>
+                    <TextInput 
+                        value={this.state.username}
+                        onChangeText={(username) => this.setState({ username })}                        
+                        style={[styles.loginInput, styles.inputBottom]} 
+                        multiline={false} 
+                        placeholder="昵称" 
+                        underlineColorAndroid="transparent"></TextInput>
+                </View>
 
-    return (
-        <View style={styles.container}>
-            <Text style={styles.loginTitle}>欢迎加入新悦读</Text>
-            <View style={{ marginTop: 30, flexDirection: 'row' }}>
-                <TextInput style={[styles.loginInput, styles.inputFirst]} 
-                    multiline={false} 
-                    placeholder="邮箱" 
-                    underlineColorAndroid="transparent"></TextInput>
+                <View style={{ marginBottom: 10, flexDirection: 'row' }}>
+                    <TouchableOpacity
+                        style={styles.loginBtn}
+                        activeOpacity={1} onPress={() => this.handleRegisterUser()}>
+                        <Text style={{ color: '#fff' }}>注册</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-            <View style={{ flexDirection: 'row' }}>
-                <TextInput style={[styles.loginInput, styles.inputSecond]} 
-                    multiline={false} 
-                    placeholder="密码" 
-                    secureTextEntry={true} 
-                    underlineColorAndroid="transparent"></TextInput>
-            </View>
-            <View style={{ marginBottom: 10, flexDirection: 'row' }}>
-                <TextInput style={[styles.loginInput, styles.inputBottom]} 
-                    multiline={false} 
-                    placeholder="昵称" 
-                    underlineColorAndroid="transparent"></TextInput>
-            </View>
+        )
+    }
 
-            <View style={{ marginBottom: 10, flexDirection: 'row' }}>
-                <TouchableOpacity
-                    style={styles.loginBtn}
-                    activeOpacity={1} onPress={() => Alert.alert('暂未开放')}>
-                    <Text style={{ color: '#fff' }}>注册</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-    )
+    handleRegisterUser = () => {
+        const { replace } = this.props.navigation;
+
+        if (this.state.email && this.state.username && this.state.password) {
+            this.setState({ loading: true })
+            const formData = {
+                email: this.state.email,
+                username: this.state.username,
+                password: this.state.password
+            }
+            registerUser(formData).then(res => {
+                this.setState({ loading: false })
+                if (res.sessionToken) {
+                    defaultAlert('注册成功，请及时检查邮件并完成验证！');
+                    replace('LoginView');
+                } else {
+                    defaultAlert(res.error || '请求异常, 请再次尝试！');
+                }
+            })
+        } else {
+            defaultAlert('存在未填项！');
+            return false;
+        }
+    }
+    
 }
 
 

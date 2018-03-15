@@ -40,7 +40,6 @@ const RootStackNavigator = StackNavigator(
             screen: itemDetail,
             navigationOptions: {
                 title: '详情',
-                header: null
             },
         },
         SearchView: {  
@@ -91,7 +90,13 @@ const RootStackNavigator = StackNavigator(
             headerStyle: {
                 backgroundColor: '#0096ff'
             },
+            headerTintColor: '#ffffff',
+            headerTitleStyle: {
+                alignSelf: 'center',
+            },
+            gesturesEnabled: true,
         }),
+        headerMode: 'screen',
     }
 );
 

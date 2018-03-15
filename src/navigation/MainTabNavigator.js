@@ -17,7 +17,6 @@ export default TabNavigator(
             navigationOptions: {
                 title: '首页',
                 // tabBarLabel: '首页',  // 底部 title
-                headerTintColor: '#ffffff',
                 header: null,
                 tabBarIcon: ({ tintColor, focused }) => (
                     <Ionicons
@@ -34,8 +33,6 @@ export default TabNavigator(
             screen: FindView,
             navigationOptions: {
                 title: '发现',
-                header: null,
-                headerTintColor: '#ffffff',
                 tabBarIcon: ({ tintColor, focused }) => (
                     <Ionicons
                         name={Platform.OS === 'ios'
@@ -51,8 +48,6 @@ export default TabNavigator(
             screen: NoteView,
             navigationOptions: {
                 title: '笔记',
-                header: null,
-                headerTintColor: '#ffffff',
                 tabBarIcon: ({ tintColor, focused }) => (
                     <Ionicons
                         name={ Platform.OS === 'ios'
@@ -68,8 +63,6 @@ export default TabNavigator(
             screen: ProfileView,
             navigationOptions: {
                 title: '我的',
-                header: null,
-                headerTintColor: '#ffffff',
                 tabBarIcon: ({ tintColor, focused }) => (
                     <Ionicons
                         name={Platform.OS === 'ios'

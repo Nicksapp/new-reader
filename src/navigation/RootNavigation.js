@@ -33,7 +33,6 @@ const RootStackNavigator = StackNavigator(
             screen: articleDetail,
             navigationOptions: {
                 title: '详情',
-                header: null
             },
         },
         ItemDetaillView: {  

@@ -8,7 +8,7 @@ export default class LoginView extends React.Component {
     constructor() {
         super();
         this.state = {
-            email: '',
+            username: '',
             password: '',
             loading: false,
         };
@@ -23,12 +23,12 @@ export default class LoginView extends React.Component {
                 <Text style={styles.loginTitle}>新悦读</Text>
                 <View style={{marginTop: 30, flexDirection: 'row'}}>
                     <TextInput 
-                        value={this.state.email}
-                        onChangeText={(email) => this.setState({ email })}
+                        value={this.state.username}
+                        onChangeText={(username) => this.setState({ username })}
                         style={[styles.loginInput, styles.inputFirst]} 
                         keyboardType="email-address" 
                         multiline={false} 
-                        placeholder="邮箱" 
+                        placeholder="用户名" 
                         underlineColorAndroid="transparent"></TextInput>
                 </View>
                 <View style={{marginBottom: 10, flexDirection: 'row'}}>
@@ -67,18 +67,34 @@ export default class LoginView extends React.Component {
         )
     }
 
+    componentWillMount() {
+        const { goBack } = this.props.navigation;
+        storage.load({
+            key: 'loginState',
+        }).then(data => {
+            if (data.sessionToken) {
+                defaultAlert('已登录，请注销当前账号后再尝试登录！');
+                goBack();
+            }
+        })
+    }
+
     handleLoginUser = () => {
-        const { replace } = this.props.navigation;
-        if (this.state.email && this.state.password) {
+        const { goBack } = this.props.navigation;
+        if (this.state.username && this.state.password) {
             this.setState({ loading: true })
             const formData = {
-                username: this.state.email,
+                username: this.state.username,
                 password: this.state.password
             }
             loginUser(formData).then(res => {
                 this.setState({ loading: false })
                 if (res.sessionToken) {
-                    replace('Main');
+                    storage.save({
+                        key: 'loginState',  // 注意:请不要在key中使用_下划线符号!
+                        data: res
+                    });
+                    goBack();
                 } else {
                     defaultAlert(res.error || '登录失败, 请再次尝试！');
                 }

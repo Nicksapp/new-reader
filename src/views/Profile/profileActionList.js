@@ -6,11 +6,30 @@ import sections from '../../config/profileActionSections'
 export default class ProfileActionList extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            loginState: '',
+        }
     }
-    
+
+    componentWillMount() {
+        storage.load({
+            key: 'loginState',
+        }).then(data => {
+            if (data.sessionToken) {
+                this.setState({ loginState: data })
+            }
+        }).catch(err => { return false; })
+    }
+
     _renderItem = (section) => {
         return (
-            <TouchableOpacity activeOpacity={1} onPress={() => this.props.onNavigatorClick(section.item.navigateTo)} style={styles.cellWrapper}>
+            <TouchableOpacity 
+                activeOpacity={1} 
+                onPress={() => 
+                    this.state.loginState && this.state.loginState.sessionToken ? 
+                    this.props.onNavigatorClick(section.item.navigateTo) :
+                    this.props.onNavigatorClick('LoginView')} 
+                style={styles.cellWrapper}>
                 <View style={styles.cellPart}>
                     <View style={{flexDirection: 'row'}}>
                         <Ionicons

@@ -1,30 +1,66 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
-export default ProfileHeader = (props) => {
-    return (
-        <View style={styles.container}>
-            <Image style={styles.avatar} source={{ uri:'https://img3.doubanio.com/view/note/large/public/p48970612.jpg'}}></Image>
-            <View style={styles.infoSection}>
-                <View>
-                    <Text style={{color: '#fff', fontSize: 18}}>淹死的鱼</Text>
-                </View>
-                <View style={styles.spaceBetweenSection}>
-                    <Text style={styles.defaultText}>ID: nickgo</Text>
-                    <Text style={{marginRight: 20, color: '#fff'}}>个人主页 > </Text>
-                </View>
-                <View style={{flexDirection:'row'}}>
-                    <Text style={{marginRight: 20, color: '#fff'}}>关注 0</Text>
-                    <Text style={styles.defaultText}>被关注 0</Text>
-                </View>
+export default class ProfileHeader extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            loginState: '',
+        }
+    }
+
+    componentWillMount () {
+        storage.load({
+            key: 'loginState',
+        }).then(data => {
+            if (data.sessionToken) {
+                this.setState({loginState:data})
+            }
+        }).catch(err => { return false; })
+    }
+
+    render() {
+        return (
+            <View style={styles.container}>
+                {
+                    this.state.loginState && this.state.loginState.sessionToken ? (
+                        <View style={{ flexDirection: 'row' }}>
+                            <Image style={styles.avatar} source={{ uri: 'https://img3.doubanio.com/view/note/large/public/p48970612.jpg' }}></Image>
+                            <View style={styles.infoSection}>
+                                <View>
+                                    <Text style={{ color: '#fff', fontSize: 18 }}>{this.state.loginState.username}</Text>
+                                </View>
+                                <View style={styles.spaceBetweenSection}>
+                                    <Text style={styles.defaultText}>Email: {this.state.loginState.email}</Text>
+                                    <Text style={{ marginRight: 20, color: '#fff' }}>个人主页 > </Text>
+                                </View>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text style={{ marginRight: 20, color: '#fff' }}>关注 0</Text>
+                                    <Text style={styles.defaultText}>被关注 0</Text>
+                                </View>
+                            </View>
+                        </View>
+                    ) : (
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Image style={styles.avatar} source={{ uri: 'http://img.zcool.cn/community/01460b57e4a6fa0000012e7ed75e83.png@2o.png' }}></Image>
+                            <TouchableOpacity 
+                                activeOpacity={1} onPress={this.props.onLoginClick}
+                                style={styles.mainBtn}>
+                                <Text style={{color: '#fff', fontWeight: '500'}}>登录 / 注册</Text>
+                            </TouchableOpacity>
+                        </View>
+                    )
+                }
+                
             </View>
-        </View>
-    )
+        )
+    }
+    
 }
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: 'row',
         paddingTop: 20,
         paddingLeft: 20,
         paddingBottom: 20,
@@ -52,6 +88,15 @@ const styles = StyleSheet.create({
     defaultText: {
         color: '#fff'
     },
-
+    mainBtn: {
+        width: 190,
+        height: 38,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#fff',
+        borderRadius: 3,
+        marginLeft: 70,
+    }
 });
 

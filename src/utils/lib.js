@@ -23,3 +23,32 @@ export function loginUser(params) {
         params
     })
 }
+
+export function getMovieInTheaters() {
+    return $http({
+        url: api.getMovieInTheaters,
+        method: 'GET',
+        params: '',
+    })
+}
+export function getMovieCommingSoon() {
+    return $http({
+        url: api.getMovieCommingSoon,
+        method: 'GET',
+        params: '',
+    })
+}
+export function getMovieTop250() {
+    return $http({
+        url: api.getMovieTop250,
+        method: 'GET',
+        params: '',
+    })
+}
+export function getMovieSubject(id) {
+    return $http({
+        url: api.getMovieSubject + '/' + id,
+        method: 'GET',
+        params: '',
+    })
+}

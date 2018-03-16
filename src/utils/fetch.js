@@ -14,9 +14,10 @@ export default function $http(options) {
         'Content-Type': 'application/json',
         'X-LC-Id': 'spWm2GIyW9DqnBkYH0bLqcrk-gzGzoHsz',
         'X-LC-Key': 'PvuLRGKSiPBrFvU1seSpt9MB',
-        'accesstoken': token  //用户登陆后返回的token，某些涉及用户数据的接口需要在header中加上token
+        // 'accesstoken': token  //用户登陆后返回的token，某些涉及用户数据的接口需要在header中加上token
     };
-    const {url, method, params} = options;
+    const {url, method='GET', params=''} = options;
+    const urlCheck = url && url.slice(0, 25) === 'https://api.douban.com/v2';
 
     console.log('request url:', url, params);  //打印请求参数
 
@@ -24,10 +25,10 @@ export default function $http(options) {
         return new Promise(function (resolve, reject) {
             fetch(url, {
                 method: method,
-                headers: header
+                headers: !!urlCheck ? null : header
             }).then((response) => response.json())
                 .then((responseData) => {
-                    console.log('res:', url, responseData);  //网络请求成功返回的数据
+                    // console.log('res:', url, responseData);  //网络请求成功返回的数据
                     resolve(responseData);
                 })
                 .catch((error) => {
@@ -44,11 +45,11 @@ export default function $http(options) {
         return new Promise(function (resolve, reject) {
             fetch(url, {
                 method: method,
-                headers: header,
+                headers: !!urlCheck ? null : header,
                 body: JSON.stringify(params)   //body参数，通常需要转换成字符串后服务器才能解析
             }).then((response) => response.json())
                 .then((responseData) => {
-                    console.log('res:', url, responseData);   //网络请求成功返回的数据
+                    // console.log('res:', url, responseData);   //网络请求成功返回的数据
                     resolve(responseData);
                 })
                 .catch((error) => {

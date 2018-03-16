@@ -12,51 +12,33 @@ export default FindItemList = (props) => {
                 horizontal={true}
                 automaticallyAdjustContentInsets={false}
                 showsHorizontalScrollIndicator={false}>
-                
-                <View style={styles.itemCard}>
-                    <View style={{flex: 6}}>
-                        <Image style={{ flex: 1, resizeMode: 'cover', borderRadius: 3}} source={{ uri: 'https://img1.doubanio.com/lpic/s29681469.jpg'}}></Image>
-                    </View>
-                    <View>
-                        <Text numberOfLines={1} style={{fontSize: 12, paddingTop: 3, fontWeight: '400'}}>刺杀骑士团长</Text>
-                        <View style={{flexDirection: 'row'}}>
-                            <Star stars="8.1"/>
-                            <Text style={{ fontSize: 11, color: '#616161', marginLeft: 3 }}>8.1</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.itemCard}>
-                    <View style={{flex: 6}}>
-                        <Image style={{ flex: 1, resizeMode: 'cover', borderRadius: 3}} source={{ uri: 'https://img1.doubanio.com/lpic/s29681469.jpg'}}></Image>
-                    </View>
-                    <View>
-                        <Text numberOfLines={1} style={{fontSize: 12, paddingTop: 3, fontWeight: '400'}}>刺杀骑士团长</Text>
-                        <View style={{flexDirection: 'row'}}>
-                            <Star stars="8.1"/>
-                            <Text style={{ fontSize: 11, color: '#616161', marginLeft: 3 }}>8.1</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.itemCard}>
-                    <View style={{flex: 6}}>
-                        <Image style={{ flex: 1, resizeMode: 'cover', borderRadius: 3}} source={{ uri: 'https://img1.doubanio.com/lpic/s29681469.jpg'}}></Image>
-                    </View>
-                    <View>
-                        <Text numberOfLines={1} style={{fontSize: 12, paddingTop: 3, fontWeight: '400'}}>刺杀骑士团长</Text>
-                        <View style={{flexDirection: 'row'}}>
-                            <Star stars="8.1"/>
-                            <Text style={{ fontSize: 11, color: '#616161', marginLeft: 3 }}>8.1</Text>
-                        </View>
-                    </View>
-                </View>
-                
-                
-                
+                {props.source.map(item => {
+                    return (
+                        <TouchableOpacity 
+                            activeOpacity={1}
+                            onPress={() => props.onItemClick(item.id)}
+                            style={styles.itemCard} key={item.id}>
+                            <View style={{ flex: 6 }}>
+                                <Image style={{ flex: 1, resizeMode: 'cover', borderRadius: 3 }} source={{ uri: item.images.small }}></Image>
+                            </View>
+                            <View>
+                                <Text numberOfLines={1} style={{ fontSize: 12, paddingTop: 3, fontWeight: '400' }}>{item.title}</Text>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Star stars={item.rating.average} />
+                                    <Text style={{ fontSize: 11, color: '#616161', marginLeft: 3 }}>{item.rating.average}</Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    )
+                })}
             </ScrollView>
         </View>
         
     )
 }
+FindItemList.defaultProps = {
+    source: [],
+};
 
 const styles = StyleSheet.create({
     cellContainer: {

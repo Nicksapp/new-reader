@@ -15,7 +15,8 @@ export default class ProfileView extends React.Component {
         return (
             <View style={styles.container}>
                 <ScrollView style={styles.mainSection}>
-                    <ProfileHeader />
+                    <ProfileHeader
+                        onLoginClick={() => navigate('LoginView')} />
                     <ProfileActionList 
                         onNavigatorClick={(page) => navigate(page)} />
                 </ScrollView>

@@ -52,3 +52,10 @@ export function getMovieSubject(id) {
         params: '',
     })
 }
+// 搜索图书
+export function getBookBySearch(params) {
+    return $http({
+        url: api.getBookBySearch + '?q=' + params.q,
+        method: 'GET',
+    })
+}

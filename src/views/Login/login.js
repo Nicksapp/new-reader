@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'reac
 import { loginUser } from '../../utils/lib'
 import { defaultAlert } from '../../utils/utils'
 import Loading from '../../components/loading'
+import { NavigationActions } from 'react-navigation';
 
 export default class LoginView extends React.Component {
     constructor() {
@@ -80,7 +81,7 @@ export default class LoginView extends React.Component {
     }
 
     handleLoginUser = () => {
-        const { goBack } = this.props.navigation;
+        const { dispatch } = this.props.navigation;
         if (this.state.username && this.state.password) {
             this.setState({ loading: true })
             const formData = {
@@ -88,17 +89,21 @@ export default class LoginView extends React.Component {
                 password: this.state.password
             }
             loginUser(formData).then(res => {
-                this.setState({ loading: false })
                 if (res.sessionToken) {
                     storage.save({
                         key: 'loginState',  // 注意:请不要在key中使用_下划线符号!
                         data: res
                     });
-                    goBack();
+                    const resetAction = NavigationActions.reset({
+                        index: 0,
+                        actions: [NavigationActions.navigate({ routeName: 'Main' })],
+                    });
+                    dispatch(resetAction);
                 } else {
                     defaultAlert(res.error || '登录失败, 请再次尝试！');
                 }
-            })
+                this.setState({ loading: false })
+            }).catch(err=>{return false})
         } else {
             defaultAlert('邮箱或密码为空！');
             return false;

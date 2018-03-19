@@ -5,34 +5,21 @@ export default class ProfileHeader extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            loginState: '',
-        }
-    }
-
-    componentWillMount () {
-        storage.load({
-            key: 'loginState',
-        }).then(data => {
-            if (data.sessionToken) {
-                this.setState({loginState:data})
-            }
-        }).catch(err => { return false; })
     }
 
     render() {
         return (
             <View style={styles.container}>
                 {
-                    this.state.loginState && this.state.loginState.sessionToken ? (
+                    this.props.loginState && this.props.loginState.sessionToken ? (
                         <View style={{ flexDirection: 'row' }}>
                             <Image style={styles.avatar} source={{ uri: 'https://img3.doubanio.com/view/note/large/public/p48970612.jpg' }}></Image>
                             <View style={styles.infoSection}>
                                 <View>
-                                    <Text style={{ color: '#fff', fontSize: 18 }}>{this.state.loginState.username}</Text>
+                                    <Text style={{ color: '#fff', fontSize: 18 }}>{this.props.loginState.username}</Text>
                                 </View>
                                 <View style={styles.spaceBetweenSection}>
-                                    <Text style={styles.defaultText}>Email: {this.state.loginState.email}</Text>
+                                    <Text style={styles.defaultText}>Email: {this.props.loginState.email}</Text>
                                     <Text style={{ marginRight: 20, color: '#fff' }}>个人主页 > </Text>
                                 </View>
                                 <View style={{ flexDirection: 'row' }}>
@@ -58,6 +45,9 @@ export default class ProfileHeader extends React.Component {
     }
     
 }
+ProfileHeader.defaultProps = {
+    loginState: {},
+};
 
 const styles = StyleSheet.create({
     container: {

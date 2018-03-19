@@ -31,7 +31,7 @@ export default class FindView extends React.Component {
                     tabBarActiveTextColor='#0096ff'
                     tabBarInactiveTextColor='#bdbdbd'
                     tabBarTextStyle={{ fontSize: 14, fontWeight: '300' }}
-                    renderTabBar={() => <DefaultTabBar style={{height: 45, borderWidth: 0.2, }}/> } >
+                    renderTabBar={() => <DefaultTabBar style={{height: 45, borderWidth: 0.2, paddingTop: 7}}/> } >
 
                     <ScrollView tabLabel="图书">
                         <FindItemList
@@ -63,12 +63,6 @@ export default class FindView extends React.Component {
                                 </View>
                             )
                        }
-                       
-                       
-                    </ScrollView>
-
-                    <ScrollView tabLabel="音乐">
-                        <Text>图书</Text>
                     </ScrollView>
                 </ScrollableTabView>
             </View>
@@ -76,7 +70,23 @@ export default class FindView extends React.Component {
     }
     
     componentDidMount() {
-        this.initData();
+        storage.load({
+            key: 'findData'
+        }).then(data => {
+            if (JSON.stringify(data.movieInTheaters) == "{}" || JSON.stringify(data.movieCommingSoon) == "{}" || JSON.stringify(data.movieTop250) == "{}") {
+                this.initData();
+            } else {
+                this.setState({ 
+                    movieInTheaters: data.movieInTheaters,
+                    movieCommingSoon: data.movieCommingSoon,
+                    movieTop250: data.movieTop250,
+                    loading: false
+                })
+            }
+        }).catch(err=> {
+            this.initData();
+        })
+        
     }
 
     initData() {
@@ -93,11 +103,23 @@ export default class FindView extends React.Component {
                     return false;
                 }
             })
-            this.state.movieInTheaters = values[0].subjects;
-            this.state.movieCommingSoon = values[1].subjects;
-            this.state.movieTop250 = values[2].subjects;
-            this.setState({ loading: false })
-        })
+            this.setState({
+                movieInTheaters: values[0].subjects,
+                movieCommingSoon: values[1].subjects,
+                movieTop250: values[2].subjects,
+                loading: false
+            })
+            
+            storage.save({
+                key: 'findData',
+                data: {
+                    movieInTheaters: values[0].subjects,
+                    movieCommingSoon: values[1].subjects,
+                    movieTop250: values[2].subjects,
+                },
+                expires: 1000 * 3600
+            })
+        }).catch(err => { return false })
     }
 
     handleToItemDetail = (id) => {

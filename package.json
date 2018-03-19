@@ -19,6 +19,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@expo/vector-icons": "6.3.1",
     "expo": "^25.0.0",
     "lodash.map": "4.6.0",
     "prop-types": "15.6.1",

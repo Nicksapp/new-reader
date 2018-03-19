@@ -219,7 +219,7 @@ export default class ItemDetail extends React.Component {
             })
             this.state.itemDetail = values[0];
             this.setState({ loading: false })
-        })
+        }).catch(err => { return false })
     }
 
     showMoreInfo = (type) => {

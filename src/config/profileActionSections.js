@@ -36,20 +36,6 @@ const sections = [
             iconAnd: 'md-ionitron',
             color: '#bdbdbd',
             navigateTo: 'DemoView'
-        }, {
-            title: '登录-开发预览',
-            key: 'a6',
-            iconIos: 'ios-ionitron',
-            iconAnd: 'md-ionitron',
-            color: '#bdbdbd',
-            navigateTo: 'LoginView'
-        }, {
-            title: 'ItemDetail-开发预览',
-            key: 'a7',
-            iconIos: 'ios-ionitron',
-            iconAnd: 'md-ionitron',
-            color: '#bdbdbd',
-            navigateTo: 'ItemDetaillView'
         }]
     }
 ]

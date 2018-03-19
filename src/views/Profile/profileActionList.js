@@ -26,9 +26,9 @@ export default class ProfileActionList extends React.Component {
             <TouchableOpacity 
                 activeOpacity={1} 
                 onPress={() => 
-                    this.state.loginState && this.state.loginState.sessionToken ? 
+                    this.state.loginState && this.state.loginState.sessionToken && section.item.navigateTo ? 
                     this.props.onNavigatorClick(section.item.navigateTo) :
-                    this.props.onNavigatorClick('LoginView')} 
+                    this.props.onNavigatorClick('LoginView')}
                 style={styles.cellWrapper}>
                 <View style={styles.cellPart}>
                     <View style={{flexDirection: 'row'}}>
@@ -67,7 +67,7 @@ export default class ProfileActionList extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 10
+        marginTop: 15
     },
     cellWrapper: {
         flexDirection: 'row',

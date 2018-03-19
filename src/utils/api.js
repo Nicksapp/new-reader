@@ -17,4 +17,16 @@ export default {
     getMovieTop250: `${douban}/movie/top250`,
     // 电影条目信息
     getMovieSubject: `${douban}/movie/subject`, // :id
+
+    // 获取图书信息
+    getBookById: `${douban}/book`, //:id
+    // 根据isbn获取图书信息
+    getBookByISBN: `${douban}/isbn`, //:name
+    // 搜索图书
+    getBookBySearch: `${douban}/book/search`, // params: q->查询关键字，tag->查询tag，count->取结果的条数, start->取结果的开始位置
+    // 获取某本图书的所有笔记
+    getBookAnnotations: `${douban}/book`, //:id/annotations,
+    // 获取某篇笔记的信息
+    getBookAnnotationsInfo: `${douban}/book/annotation`, //:id
+    
 }

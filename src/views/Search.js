@@ -1,12 +1,18 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, SectionList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { getBookBySearch } from '../utils/lib'
+import SearchCell from '../components/searchCell'
+import Loading from '../components/loading'
+import Star from '../components/star'
 
 export default class Search extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             text: '',
+            loading: false,
+            searchResult: [],
         }
     }
 
@@ -18,6 +24,7 @@ export default class Search extends React.Component {
     }
 
     render() {
+        
         return (
             <View style={styles.container}>
                 <View style={styles.headerContainer}>
@@ -30,61 +37,118 @@ export default class Search extends React.Component {
                             onChangeText={(text) => this.setState({ text })}
                             placeholder='搜索'
                             value={this.state.text}
-                            underlineColorAndroid="transparent"></TextInput>
+                            underlineColorAndroid="transparent"
+                            onChangeText={(text) => {
+                                this.setState({text});// 当内容改变时执行该方法  
+                            }}  
+                            onSubmitEditing={() => {this.handleToSearch()}}></TextInput>
                     </View>
                 </View>
-                <View style={styles.mainContainer}>
-                    <View style={styles.rowBetween}>
-                        <Text style={styles.textHeader}>历史搜索</Text>
-                        <TouchableOpacity onPress={this.handleToClearHistory.bind(this)}>
-                            <Ionicons name="ios-trash" size={18} style={{ color: '#cecece' }} />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 15 }}>
-                        <TouchableOpacity style={styles.tagCon} activeOpacity={1} onPress={this.handleToTag.bind(this)}>
-                            <Text style={styles.greyTag}>恐吓运动</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.tagCon} activeOpacity={1} onPress={this.handleToTag.bind(this)}>
-                            <Text style={styles.greyTag}>前任3</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.tagCon} activeOpacity={1} onPress={this.handleToTag.bind(this)}>
-                            <Text style={styles.greyTag}>其他</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <View style={[styles.mainContainer, { marginTop: 30 }]}>
-                    <View>
-                        <Text style={styles.textHeader}>热门搜索</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 20 }}>
-                        <TouchableOpacity style={styles.tagCon} activeOpacity={1} onPress={this.handleToTag.bind(this)}>
-                            <Text style={styles.greyTag}>三块广告牌</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.tagCon} activeOpacity={1} onPress={this.handleToTag.bind(this)}>
-                            <Text style={styles.greyTag}>前任3:再见前任</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.tagCon} activeOpacity={1} onPress={this.handleToTag.bind(this)}>
-                            <Text style={styles.greyTag}>老男孩</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.tagCon} activeOpacity={1} onPress={this.handleToTag.bind(this)}>
-                            <Text style={styles.greyTag}>八卦艺术史</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.tagCon} activeOpacity={1} onPress={this.handleToTag.bind(this)}>
-                            <Text style={styles.greyTag}>相亲后的吐槽</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.tagCon} activeOpacity={1} onPress={this.handleToTag.bind(this)}>
-                            <Text style={styles.greyTag}>豆瓣2017年度电影榜单</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.tagCon} activeOpacity={1} onPress={this.handleToTag.bind(this)}>
-                            <Text style={styles.greyTag}>1984</Text>
-                        </TouchableOpacity>
 
+                <SectionList
+                    style={{ display: this.state.searchResult && this.state.searchResult.length === 0 ? 'none' : 'flex' }}
+                    renderItem={this._renderItem}
+                    sections={this.state.searchResult} />
+
+                <View style={{ display: this.state.searchResult && this.state.searchResult.length === 0 ? 'flex' : 'none' }}>
+                    <View style={styles.mainContainer}>
+                        <View style={styles.rowBetween}>
+                            <Text style={styles.textHeader}>历史搜索</Text>
+                            <TouchableOpacity onPress={this.handleToClearHistory.bind(this)}>
+                                <Ionicons name="ios-trash" size={18} style={{ color: '#cecece' }} />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 15 }}>
+                            <TouchableOpacity style={styles.tagCon} activeOpacity={1} onPress={this.handleToTag.bind(this)}>
+                                <Text style={styles.greyTag}>恐吓运动</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.tagCon} activeOpacity={1} onPress={this.handleToTag.bind(this)}>
+                                <Text style={styles.greyTag}>前任3</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.tagCon} activeOpacity={1} onPress={this.handleToTag.bind(this)}>
+                                <Text style={styles.greyTag}>其他</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <View style={[styles.mainContainer, { marginTop: 30 }]}>
+                        <View>
+                            <Text style={styles.textHeader}>热门搜索</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 20 }}>
+                            <TouchableOpacity style={styles.tagCon} activeOpacity={1} onPress={this.handleToTag.bind(this)}>
+                                <Text style={styles.greyTag}>三块广告牌</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.tagCon} activeOpacity={1} onPress={this.handleToTag.bind(this)}>
+                                <Text style={styles.greyTag}>前任3:再见前任</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.tagCon} activeOpacity={1} onPress={this.handleToTag.bind(this)}>
+                                <Text style={styles.greyTag}>老男孩</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.tagCon} activeOpacity={1} onPress={this.handleToTag.bind(this)}>
+                                <Text style={styles.greyTag}>八卦艺术史</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.tagCon} activeOpacity={1} onPress={this.handleToTag.bind(this)}>
+                                <Text style={styles.greyTag}>相亲后的吐槽</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.tagCon} activeOpacity={1} onPress={this.handleToTag.bind(this)}>
+                                <Text style={styles.greyTag}>豆瓣2017年度电影榜单</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.tagCon} activeOpacity={1} onPress={this.handleToTag.bind(this)}>
+                                <Text style={styles.greyTag}>1984</Text>
+                            </TouchableOpacity>
+
+                        </View>
                     </View>
                 </View>
+                
+               
             </View>
         )
     }
 
+    _renderItem = (section) => {
+        const { navigate } = this.props.navigation;
+        return (
+            <TouchableOpacity activeOpacity={1} onPress={() => navigate('ItemDetaillView', { id: section.item.id })} key={section.item.id}>
+                <View style={styles.cellContainer}>
+                    <View style={{ flex: 1, height: 85 }}>
+                        <Image style={{ flex: 1, resizeMode: 'contain' }} source={{ uri: section.item.image }} ></Image>
+                    </View>
+                    <View style={{ flex: 6, marginLeft: 10 }}>
+                        <Text style={{color: '#333', fontSize: 16, fontWeight: '500'}}>{section.item.title}</Text>
+                        <Text style={{ color: '#666', fontSize: 12, paddingTop: 3, paddingBottom: 3, display: section.item.subtitle?'flex':'none'}}>{section.item.subtitle}</Text>
+                        <Star stars={section.item.rating.average} />
+                        <Text style={{color: '#666', fontSize: 12}}>{section.item.author[0]} / {section.item.pubdate}</Text>
+                    </View>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+    handleToSearch = () => {
+        if (this.state.text !== '') {
+            let params = {
+                q: this.state.text
+            }
+            console.log(params)
+            getBookBySearch(params).then(res => {
+                if (res.books && res.books.length) {
+                    const responseData = res.books.map(item => {
+                        return Object.assign({}, item, {
+                            key: item.id
+                        })
+                    });
+                    let result = [{
+                        key: 'books',
+                        data: responseData
+                    }]
+                    this.setState({
+                        searchResult: result
+                    })
+                }
+            }).catch(err => {console.log(err)})
+        }
+    }
 }
 
 const styles = StyleSheet.create({
@@ -137,5 +201,12 @@ const styles = StyleSheet.create({
     },
     greyTag: {
         color: '#666',
+    },
+    cellContainer: {
+        paddingTop: 10,
+        paddingBottom: 10,
+        flexDirection: 'row',
+        borderBottomWidth: 0.3,
+        borderBottomColor: '#e6e6e6'
     }
 });

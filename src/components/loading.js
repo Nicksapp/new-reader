@@ -4,7 +4,9 @@ import {
     Text,
     ProgressBarAndroid,
     Modal,
-    StyleSheet
+    StyleSheet,
+    ActivityIndicator,
+    Platform
 } from 'react-native';
 
 export default class Loading extends Component {
@@ -23,7 +25,13 @@ export default class Loading extends Component {
                 onRequestClose={() => this.onRequestClose()}
             >
                 <View style={styles.loadingBox}>
-                    <ProgressBarAndroid styleAttr='Inverse' color='#fafafa' />
+                    {
+                        Platform.OS === 'ios' ? (
+                            <ActivityIndicator color='#fafafa' size="large" />
+                        ) : (
+                            <ProgressBarAndroid styleAttr='Inverse' color='#fafafa' />
+                        )
+                    }
                 </View>
             </Modal>
         );

@@ -4,6 +4,13 @@
 > 
 > 课题：新媒体扩展阅读移动端App开发, 18届本科毕业设计.
 
+## 预览
+
+```
+1. 下载 expo 客户端
+2. 用 expo 打开 https://exp.host/@nicksapp/NewReader 即可
+```
+
 ## 技术应用
 
 * `react`
@@ -13,6 +20,8 @@
 **主要模块**
 
 * `react-navigation` 导航
+* `react-native-storage` 本地持久存储
+* `react-native-scrollable-tab-view` tab 切换
 
 ## 项目构建
 
@@ -32,10 +41,12 @@ yarn start
   * [npm run android](#npm-run-android)
   * [npm run eject](#npm-run-eject)
 
+## Api 数据
 
-## 开发要点
+* [豆瓣Api V2](https://developers.douban.com/wiki/?title=api_v2)
 
-* 二维码扫描，相机应用
+## 参考文章
 
-
+* [Ionicons](https://ionicframework.com/docs/ionicons/)
+* [react-navigation使用技巧](https://www.jianshu.com/p/2f575cc35780)
 

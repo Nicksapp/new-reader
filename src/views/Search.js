@@ -13,14 +13,22 @@ export default class Search extends React.Component {
             text: '',
             loading: false,
             searchResult: [],
+            searchTextArr: [],
         }
     }
 
     handleToTag() {
         console.log("tag clicked")
     }
+    
     handleToClearHistory() {
-        console.log("history cleared")
+        storage.remove({
+            key: 'searchHistory'
+        }).then(() => {
+            this.setState({
+                searchTextArr: []
+            })
+        })
     }
 
     render() {
@@ -59,15 +67,15 @@ export default class Search extends React.Component {
                             </TouchableOpacity>
                         </View>
                         <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 15 }}>
-                            <TouchableOpacity style={styles.tagCon} activeOpacity={1} onPress={this.handleToTag.bind(this)}>
-                                <Text style={styles.greyTag}>恐吓运动</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.tagCon} activeOpacity={1} onPress={this.handleToTag.bind(this)}>
-                                <Text style={styles.greyTag}>前任3</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.tagCon} activeOpacity={1} onPress={this.handleToTag.bind(this)}>
-                                <Text style={styles.greyTag}>其他</Text>
-                            </TouchableOpacity>
+                            {
+                                this.state.searchTextArr.map((item, index) => {
+                                    return (
+                                        <TouchableOpacity style={styles.tagCon} activeOpacity={1} key={index} onPress={this.handleToTag.bind(this)}>
+                                            <Text style={styles.greyTag}>{item}</Text>
+                                        </TouchableOpacity>
+                                    )   
+                                })
+                            }
                         </View>
                     </View>
                     <View style={[styles.mainContainer, { marginTop: 30 }]}>
@@ -109,7 +117,7 @@ export default class Search extends React.Component {
     _renderItem = (section) => {
         const { navigate } = this.props.navigation;
         return (
-            <TouchableOpacity activeOpacity={1} onPress={() => navigate('ItemDetaillView', { id: section.item.id })} key={section.item.id}>
+            <TouchableOpacity activeOpacity={1} onPress={() => navigate('ItemDetaillView', { id: section.item.id, type: 'BOOK' })} key={section.item.id}>
                 <View style={styles.cellContainer}>
                     <View style={{ flex: 1, height: 85 }}>
                         <Image style={{ flex: 1, resizeMode: 'contain' }} source={{ uri: section.item.image }} ></Image>
@@ -125,12 +133,23 @@ export default class Search extends React.Component {
         )
     }
 
+    componentDidMount() {
+        storage.load({
+            key: 'searchHistory'
+        }).then(data => {
+            if (data.searchTextArr && data.searchTextArr.length) {
+                this.setState({
+                    searchTextArr: data.searchTextArr
+                })
+            }
+        })
+    }
+
     handleToSearch = () => {
         if (this.state.text !== '') {
             let params = {
                 q: this.state.text
             }
-            console.log(params)
             getBookBySearch(params).then(res => {
                 if (res.books && res.books.length) {
                     const responseData = res.books.map(item => {
@@ -148,6 +167,31 @@ export default class Search extends React.Component {
                 }
             }).catch(err => {console.log(err)})
         }
+        storage.load({
+            key: 'searchHistory'
+        }).then(data => {
+            if (data.searchTextArr && data.searchTextArr.length) {
+                let temp = data.searchTextArr;
+                return temp.push(this.state.text)
+            }
+        }).then(val => {
+            storage.save({
+                key: 'searchHistory',
+                data: {
+                    searchTextArr: val
+                },
+                expires: 1000 * 3600 * 7
+            })
+        }).catch(err => {
+            storage.save({
+                key: 'searchHistory',
+                data: {
+                    searchTextArr: [this.state.text]
+                },
+                expires: 1000 * 3600 * 7
+            })
+        })
+        
     }
 }
 

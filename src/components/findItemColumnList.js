@@ -24,7 +24,7 @@ export default FindItemColumnList = (props) => {
                                     <Star stars={item.rating.average}/>
                                     <Text style={{ fontSize: 11, color: '#616161', marginLeft: 3 }}>{item.rating.average}</Text>
                                 </View>
-                                <Text numberOfLines={1} style={{ fontSize: 12, color: '#757575', paddingBottom: 5, paddingTop: 5 }}>{item.directors[0].name} / {item.year} / {item.casts.map(it => it.name + ' ')}</Text>
+                                <Text numberOfLines={1} style={{ fontSize: 12, color: '#757575', paddingBottom: 5, paddingTop: 5 }}>{item.directors ? item.directors[0].name : item.author[0]} / {item.year || item.pubdate} / {item.casts ? item.casts.map(it => it.name + ' ') : item.publisher}</Text>
                                 <View style={{ padding: 8, backgroundColor: '#eeeeee', borderRadius: 3}}>
                                     <Text numberOfLines={1} style={{ fontSize: 12, color: '#757575' }}>{props.sectionName}</Text>
                                 </View>

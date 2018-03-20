@@ -4,7 +4,7 @@ import ScrollableTabView, {DefaultTabBar} from 'react-native-scrollable-tab-view
 import FindItemList from '../../components/findItemList'
 import FindItemColumnList from '../../components/findItemColumnList'
 
-import { getMovieInTheaters, getMovieCommingSoon, getMovieTop250 } from '../../utils/lib'
+import { getMovieInTheaters, getMovieCommingSoon, getMovieTop250, getBookBySeries } from '../../utils/lib'
 import { alertDefault } from '../../utils/utils'
 
 import Loading from '../../components/loading'
@@ -16,6 +16,12 @@ export default class FindView extends React.Component {
             movieInTheaters: [],
             movieCommingSoon: [],
             movieTop250: [],
+            bookSeries1: [],
+            bookSeries2: [],
+            bookSeries3: [],
+            series1Name: '',
+            series2Name: '',
+            series3Name: '',
             loading: false,
         }
     }
@@ -34,14 +40,28 @@ export default class FindView extends React.Component {
                     renderTabBar={() => <DefaultTabBar style={{height: 45, borderWidth: 0.2, paddingTop: 7}}/> } >
 
                     <ScrollView tabLabel="图书">
-                        <FindItemList
-                            sectionName="最受关注的虚构类图书" />
-                        <FindItemColumnList
-                            sectionName="你可能感兴趣" />
+                    {
+                        this.state.loading ? (<Loading />) : (
+                            <View>
+                                <FindItemList
+                                    sectionName={this.state.series1Name}
+                                    onItemClick={this.handleToBookItemDetail}
+                                    source={this.state.bookSeries1} />
+                                <FindItemList
+                                    sectionName={this.state.series2Name}
+                                    onItemClick={this.handleToBookItemDetail}
+                                    source={this.state.bookSeries2} />
+                                <FindItemColumnList
+                                    sectionName={this.state.series3Name}
+                                    onItemClick={this.handleToBookItemDetail}
+                                    source={this.state.bookSeries3} />
+                            </View>
+                        )
+                    }
                     </ScrollView>
                     
                     <ScrollView tabLabel="课程" >
-                        <Text>课程</Text>
+                        <Text>kecheng</Text>
                     </ScrollView>
 
                     <ScrollView tabLabel="电影">
@@ -70,6 +90,7 @@ export default class FindView extends React.Component {
     }
     
     componentDidMount() {
+        this.initData();
         storage.load({
             key: 'findData'
         }).then(data => {
@@ -80,21 +101,29 @@ export default class FindView extends React.Component {
                     movieInTheaters: data.movieInTheaters,
                     movieCommingSoon: data.movieCommingSoon,
                     movieTop250: data.movieTop250,
+                    bookSeries1: data.bookSeries1,
+                    bookSeries2: data.bookSeries2,
+                    bookSeries3: data.bookSeries3,
                     loading: false
                 })
             }
         }).catch(err=> {
             this.initData();
         })
-        
     }
 
     initData() {
         this.setState({loading: true})
+        const seriesId1 = Math.floor(Math.random() * 10000);
+        const seriesId2 = Math.floor(Math.random() * 10000);
+        const seriesId3 = Math.floor(Math.random() * 10000);
         Promise.all([
             getMovieInTheaters(),
             getMovieCommingSoon(),
-            getMovieTop250()
+            getMovieTop250(),
+            getBookBySeries(seriesId1),
+            getBookBySeries(seriesId2),
+            getBookBySeries(seriesId3),
         ]).then(values => {
             values.forEach(res => {
                 if (!res) {
@@ -107,6 +136,12 @@ export default class FindView extends React.Component {
                 movieInTheaters: values[0].subjects,
                 movieCommingSoon: values[1].subjects,
                 movieTop250: values[2].subjects,
+                bookSeries1: values[3].books,
+                series1Name: values[3].books[0].series.title,
+                bookSeries2: values[4].books,
+                series2Name: values[4].books[0].series.title,
+                bookSeries3: values[5].books,
+                series3Name: values[5].books[0].series.title,
                 loading: false
             })
             
@@ -116,6 +151,9 @@ export default class FindView extends React.Component {
                     movieInTheaters: values[0].subjects,
                     movieCommingSoon: values[1].subjects,
                     movieTop250: values[2].subjects,
+                    bookSeries1: values[3].books,
+                    bookSeries2: values[4].books,
+                    bookSeries3: values[5].books,
                 },
                 expires: 1000 * 3600
             })
@@ -124,7 +162,12 @@ export default class FindView extends React.Component {
 
     handleToItemDetail = (id) => {
         const { navigate } = this.props.navigation;
-        navigate('ItemDetaillView', { id })
+        navigate('ItemDetaillView', { id , type: 'MOVIE' })
+    }
+    
+    handleToBookItemDetail = (id) => {
+        const { navigate } = this.props.navigation;
+        navigate('ItemDetaillView', { id , type: 'BOOK' })
     }
 }
 

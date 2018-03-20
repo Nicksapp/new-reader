@@ -4,7 +4,7 @@ import CommentItem from '../../components/commentItem'
 import Star from '../../components/star'
 import Loading from '../../components/loading'
 
-import { getMovieSubject } from '../../utils/lib'
+import { getMovieSubject, getBookById, getBookAnnotations } from '../../utils/lib'
 
 export default class ItemDetail extends React.Component {
     constructor(props) {
@@ -16,6 +16,7 @@ export default class ItemDetail extends React.Component {
             textAuthor: '展开',
 
             itemDetail: {},
+            bookAnnotations: {},
             loading: false,
         }
     }
@@ -51,10 +52,10 @@ export default class ItemDetail extends React.Component {
                                             </View>
                                         ) : (
                                                 <View style={{ marginTop: 10 }}>
-                                                <Text style={styles.titleInfo}>作者：[美]布莱恩·费瑟思通豪</Text>
-                                                <Text style={styles.titleInfo}>出版社：北京联合出版公司</Text>
-                                                <Text style={styles.titleInfo}>出版时间：2018-1</Text>
-                                            </View>
+                                                    <Text style={styles.titleInfo}>作者：{this.state.itemDetail.author.join(' ')}</Text>
+                                                    <Text style={styles.titleInfo}>出版社：{this.state.itemDetail.publisher}</Text>
+                                                    <Text style={styles.titleInfo}>出版时间：{this.state.itemDetail.pubdate}</Text>
+                                                </View>
                                         )
                                     }
                                         
@@ -64,7 +65,11 @@ export default class ItemDetail extends React.Component {
                                         <Text style={styles.titleInfo}>豆瓣评分</Text>
                                         <Text style={{ fontSize: 20, fontWeight: '500', color: '#333' }}>{this.state.itemDetail.rating.average}</Text>
                                         <Star stars={this.state.itemDetail.rating.average}/>
-                                        <Text style={{ fontSize: 11, color: '#616161' }}>{this.state.itemDetail.ratings_count}人</Text>
+                                        <Text style={{ fontSize: 11, color: '#616161' }}>
+                                            {
+                                                this.state.itemDetail.subtype === 'movie' ? this.state.itemDetail.ratings_count + '人' : this.state.itemDetail.rating.numRaters+'人'
+                                            }
+                                        </Text>
                                     </View>
                                 </View>
                                 
@@ -133,36 +138,22 @@ export default class ItemDetail extends React.Component {
                                             horizontal={true}
                                             automaticallyAdjustContentInsets={false}
                                             showsHorizontalScrollIndicator={false}>
-                                            <View style={styles.noteCard}>
-                                                <Text style={{fontSize: 13, fontWeight: '500', color: '#333'}}>第一页</Text>
-                                                <Text style={{fontSize: 12, color: '#424242', marginTop: 5 ,marginBottom: 5}} numberOfLines={4}>所擅长的，所热爱的，这个世界所需要的三大让廖访问量您访问分为范围你发了五年范围看哪个方位开关文革我看那个翁老翁范围来看给你热快乐那个个人干呢人来看过呢人看过呢，废物废物各位个人人格二哥</Text>
-                                                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                                                    <View>
-                                                        <Text style={{fontSize: 11, color: '#757575'}}>野人五姑娘</Text>
-                                                    </View>
-                                                    <Text style={{fontSize: 11, color: '#757575'}}>1个月前</Text>
-                                                </View>
-                                            </View>
-                                            <View style={styles.noteCard}>
-                                                <Text style={{fontSize: 13, fontWeight: '500', color: '#333'}}>第一页</Text>
-                                                <Text style={{fontSize: 12, color: '#424242', marginTop: 5 ,marginBottom: 5}} numberOfLines={4}>所擅长的，所热爱的，这个世界所需要的三大让廖访问量您访问分为范围你发了五年范围看哪个方位开关文革我看那个翁老翁范围来看给你热快乐那个个人干呢人来看过呢人看过呢，废物废物各位个人人格二哥</Text>
-                                                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                                                    <View>
-                                                        <Text style={{fontSize: 11, color: '#757575'}}>野人五姑娘</Text>
-                                                    </View>
-                                                    <Text style={{fontSize: 11, color: '#757575'}}>1个月前</Text>
-                                                </View>
-                                            </View>
-                                            <View style={styles.noteCard}>
-                                                <Text style={{fontSize: 13, fontWeight: '500', color: '#333'}}>第一页</Text>
-                                                <Text style={{fontSize: 12, color: '#424242', marginTop: 5 ,marginBottom: 5}} numberOfLines={4}>所擅长的，所热爱的，这个世界所需要的三大让廖访问量您访问分为范围你发了五年范围看哪个方位开关文革我看那个翁老翁范围来看给你热快乐那个个人干呢人来看过呢人看过呢，废物废物各位个人人格二哥</Text>
-                                                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                                                    <View>
-                                                        <Text style={{fontSize: 11, color: '#757575'}}>野人五姑娘</Text>
-                                                    </View>
-                                                    <Text style={{fontSize: 11, color: '#757575'}}>1个月前</Text>
-                                                </View>
-                                            </View>
+                                            {
+                                                this.state.bookAnnotations.annotations.map(item => {
+                                                    return (
+                                                        <View style={styles.noteCard} key={item.id}>
+                                                            <Text style={{ fontSize: 13, fontWeight: '500', color: '#333' }}>{item.chapter}</Text>
+                                                            <Text style={{ fontSize: 12, color: '#424242', marginTop: 5, marginBottom: 5 }} numberOfLines={4}>{item.summary}</Text>
+                                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                                                <View>
+                                                                    <Text style={{ fontSize: 11, color: '#757575' }}>{item.author_user.name}</Text>
+                                                                </View>
+                                                                <Text style={{ fontSize: 11, color: '#757575' }}>{item.time}</Text>
+                                                            </View>
+                                                        </View>
+                                                    )
+                                                })
+                                            }
                                         </ScrollView>
                                     </View>
                                 </View>
@@ -201,12 +192,31 @@ export default class ItemDetail extends React.Component {
     }
 
     initData() {
-        const id = this.props.navigation.state.params.id || '';
+        const { id, type } = this.props.navigation.state.params;
+        const { goBack } = this.props.navigation;
         if (!id) {
             alertDefault('查找错误！');
             this.props.navigation.goBack();
             return false;
         }
+        switch (type) {
+            case 'MOVIE': {
+                this._handleFetchMovieData(id);
+                break;
+            }
+            case 'BOOK': {
+                this._handleFetchBookData(id);
+                break;
+            }
+            default: {
+                alertDefault('暂不支持此类详情的访问！');
+                goBack();
+            }
+        }
+        
+    }
+
+    _handleFetchMovieData(id) {
         Promise.all([
             getMovieSubject(id),
         ]).then(values => {
@@ -218,6 +228,26 @@ export default class ItemDetail extends React.Component {
                 }
             })
             this.state.itemDetail = values[0];
+            this.setState({ loading: false })
+        }).catch(err => { return false })
+    }
+
+    _handleFetchBookData(id) {
+        Promise.all([
+            getBookById(id),
+            getBookAnnotations(id)
+        ]).then(values => {
+            values.forEach(res => {
+                if (!res) {
+                    alertDefault('网络请求异常！');
+                    this.setState({ loading: false })
+                    return false;
+                }
+            })
+            this.setState({
+                itemDetail: values[0],
+                bookAnnotations: Object.assign({}, values[1]),
+            })
             this.setState({ loading: false })
         }).catch(err => { return false })
     }

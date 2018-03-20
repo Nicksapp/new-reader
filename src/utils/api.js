@@ -28,5 +28,7 @@ export default {
     getBookAnnotations: `${douban}/book`, //:id/annotations,
     // 获取某篇笔记的信息
     getBookAnnotationsInfo: `${douban}/book/annotation`, //:id
+    // 获取某系列书目
+    getBookBySeries: `${douban}/book/series`, //  :id/books
     
 }

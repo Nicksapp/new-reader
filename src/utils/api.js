@@ -21,7 +21,7 @@ export default {
     // 获取图书信息
     getBookById: `${douban}/book`, //:id
     // 根据isbn获取图书信息
-    getBookByISBN: `${douban}/isbn`, //:name
+    getBookByISBN: `${douban}/book/isbn`, //:name
     // 搜索图书
     getBookBySearch: `${douban}/book/search`, // params: q->查询关键字，tag->查询tag，count->取结果的条数, start->取结果的开始位置
     // 获取某本图书的所有笔记

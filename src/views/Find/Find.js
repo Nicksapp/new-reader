@@ -1,8 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, Image, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Button, Image, ScrollView} from 'react-native';
+import { Video } from 'expo';
 import ScrollableTabView, {DefaultTabBar} from 'react-native-scrollable-tab-view';
 import FindItemList from '../../components/findItemList'
 import FindItemColumnList from '../../components/findItemColumnList'
+import VideoList from '../../components/videoList'
 
 import { getMovieInTheaters, getMovieCommingSoon, getMovieTop250, getBookBySeries } from '../../utils/lib'
 import { alertDefault } from '../../utils/utils'
@@ -61,7 +63,23 @@ export default class FindView extends React.Component {
                     </ScrollView>
                     
                     <ScrollView tabLabel="课程" >
-                        <Text>kecheng</Text>
+                        <VideoList source={
+                            [{ 
+                                key: 'a', 
+                                data: [
+                                    { 
+                                        key: '123',
+                                        url: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
+                                        title: '测量物质密度归类分析',
+                                        desc: '测量物质密度归类分析'
+                                    }, {
+                                        key: '422',
+                                        url: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
+                                        title: '测量物质密度归类分析',
+                                        desc: '测量物质密度归类分析'
+                                    }
+                                ]
+                            }]} />
                     </ScrollView>
 
                     <ScrollView tabLabel="电影">
@@ -90,7 +108,6 @@ export default class FindView extends React.Component {
     }
     
     componentDidMount() {
-        this.initData();
         storage.load({
             key: 'findData'
         }).then(data => {

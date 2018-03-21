@@ -79,3 +79,10 @@ export function getBookBySeries(id) {
         method: 'GET'
     })
 }
+// 根据isbn获取图书信息
+export function getBookByISBN(isbn) {
+    return $http({
+        url: api.getBookByISBN + '/' + isbn,
+        method: 'GET'
+    })
+}

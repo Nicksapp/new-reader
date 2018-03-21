@@ -121,6 +121,9 @@ export default class FindView extends React.Component {
                     bookSeries1: data.bookSeries1,
                     bookSeries2: data.bookSeries2,
                     bookSeries3: data.bookSeries3,
+                    series1Name: data.series1Name,
+                    series2Name: data.series2Name,
+                    series3Name: data.series3Name,
                     loading: false
                 })
             }
@@ -171,6 +174,9 @@ export default class FindView extends React.Component {
                     bookSeries1: values[3].books,
                     bookSeries2: values[4].books,
                     bookSeries3: values[5].books,
+                    series1Name: values[3].books[0].series.title,
+                    series2Name: values[4].books[0].series.title,
+                    series3Name: values[5].books[0].series.title,
                 },
                 expires: 1000 * 3600
             })

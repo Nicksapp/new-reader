@@ -5,7 +5,6 @@ import SearchHeader from '../../components/searchHeader'
 import ListContainer from '../../components/ListContainer'
 import ListItem from '../../components/ListItemHome'
 
-
 export default class HomeView extends React.Component {
     constructor(props) {
         super(props);
@@ -13,11 +12,10 @@ export default class HomeView extends React.Component {
             text: 'search your food',
             isRefreshing: false,
         };
-        // this._onRefresh = this._onRefresh.bind(this);
     }
 
     componentWillMount() {
-        // this.props.navigation.navigate('LoginView')
+        
     }
 
     _onRefresh = () => {

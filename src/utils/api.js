@@ -2,6 +2,7 @@ const bird = "https://bird.ioliu.cn/v2?url=";
 
 const api = "https://spwm2giy.api.lncld.net/1.1";
 const douban = "https://api.douban.com/v2";
+const leanclooud = "https://nreader.leanapp.cn/api"
 
 export default {
     // 注册
@@ -30,5 +31,8 @@ export default {
     getBookAnnotationsInfo: `${douban}/book/annotation`, //:id
     // 获取某系列书目
     getBookBySeries: `${douban}/book/series`, //  :id/books
+
+    // 获取豆瓣今日精选
+    getTodayRecommend: `${leanclooud}/doubanhome`,
     
 }

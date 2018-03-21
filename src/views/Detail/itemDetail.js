@@ -29,10 +29,10 @@ export default class ItemDetail extends React.Component {
             <View style={{ backgroundColor: '#eeeeee'}}>
                 <ScrollView>
                     <View style={styles.headerImage}>
-                        <Image style={styles.mainImage} source={{ uri: this.state.itemDetail.images.medium}}></Image>
+                        <Image style={styles.mainImage} source={{ uri: this.state.itemDetail.images.large}}></Image>
                     </View>
                     <View style={{padding: 20}}>
-                        <View style={{borderBottomWidth: 0.5, borderBottomColor: '#e0e0e0', paddingBottom: 15}}>
+                        <View style={{ paddingBottom: 15}}>
                             <View style={styles.mainTitle}>
                                 <View style={{flex: 3}}>
                                     <Text numberOfLines={1} style={{ fontSize: 20, fontWeight: '600', color: '#333' }}>{this.state.itemDetail.title}</Text>
@@ -51,11 +51,11 @@ export default class ItemDetail extends React.Component {
                                                 {/* <Text style={styles.titleInfo}>上映时间: {this.state.itemDetail.current_season || ''}</Text> */}
                                             </View>
                                         ) : (
-                                                <View style={{ marginTop: 10 }}>
-                                                    <Text style={styles.titleInfo}>作者：{this.state.itemDetail.author.join(' ')}</Text>
-                                                    <Text style={styles.titleInfo}>出版社：{this.state.itemDetail.publisher}</Text>
-                                                    <Text style={styles.titleInfo}>出版时间：{this.state.itemDetail.pubdate}</Text>
-                                                </View>
+                                            <View style={{ marginTop: 10 }}>
+                                                <Text style={styles.titleInfo}>作者：{this.state.itemDetail.author.join(' ')}</Text>
+                                                <Text style={styles.titleInfo}>出版社：{this.state.itemDetail.publisher}</Text>
+                                                <Text style={styles.titleInfo}>出版时间：{this.state.itemDetail.pubdate}</Text>
+                                            </View>
                                         )
                                     }
                                         
@@ -81,8 +81,37 @@ export default class ItemDetail extends React.Component {
                             </View>
                         </View>
                         
+                        {
+                            this.state.itemDetail.subtype === 'movie' ? (
+                                <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: 10 }}>
+                                    {
+                                        this.state.itemDetail.genres.map(item => {
+                                            return (
+                                                <View key={item} style={{ paddingTop: 5, paddingBottom: 5, paddingLeft: 10, paddingRight: 10, backgroundColor: '#e6e6e6', margin: 3, borderRadius: 3 }}>
+                                                    <Text style={{ color: '#666' }}>{item}</Text>
+                                                </View>
+                                            )
+                                        })
+                                    }
 
-                        <View style={styles.mainInfo}>
+                                </View>
+                            ) : (
+                                <View style={{flexDirection: 'row', flexWrap: 'wrap',marginBottom: 10}}>
+                                    {
+                                        this.state.itemDetail.tags.map(item => {
+                                            return (
+                                                <View key={item.name} style={{paddingTop: 5, paddingBottom: 5, paddingLeft: 10, paddingRight: 10, backgroundColor: '#e6e6e6',margin: 3,borderRadius: 3}}>
+                                                    <Text style={{color: '#666'}}>{item.title}</Text>
+                                                </View>
+                                            )
+                                        })
+                                    }
+                                    
+                                </View>
+                            )
+                        }
+
+                        <View style={styles.mainInfo} style={{ borderTopWidth: 0.5, borderTopColor: '#e0e0e0', paddingTop: 10}}>
                             <Text style={styles.mainInfoTitle}>简介</Text>
                             <Text style={styles.descText} numberOfLines={this.state.numberOfLinesDesc}>
                                 {this.state.itemDetail.summary}
@@ -295,7 +324,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     titleInfo: {
-        fontSize: 11,
+        fontSize: 12,
         lineHeight: 13,
         color: '#757575'
     },

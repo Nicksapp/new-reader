@@ -11,11 +11,17 @@ export default ListItemHome = (props) => {
                         <Text style={styles.descTitle} numberOfLines={2}>{props.descTitle}</Text>
                     </View>
                     <View style={{ flex: 1, marginLeft: 12, justifyContent: 'space-between' }}>
-                        <Image style={{ resizeMode: 'contain', flex: 1 }} source={{ uri: props.imgUrl }}></Image>
+                    {
+                        props.imgUrl ? (<Image style={{ resizeMode: 'contain', flex: 1 }} source={{ uri: props.imgUrl }}></Image>) : (null)
+                    }
                     </View>
                 </View>
                 <View style={[styles.rowFlex, styles.spaceBetween, styles.bottomSection]}>
-                    <Text style={styles.bottomText}>作者: {props.author}</Text>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <Image style={{width: 24, height: 24, borderRadius:12}} source={{uri: props.authorImage}}></Image>
+                        <Text style={styles.bottomText}>{props.author}</Text>
+                    </View>
+                    
                     <Text style={styles.bottomText}>{props.label}</Text>
                 </View>
             </View>
@@ -50,10 +56,12 @@ const styles = StyleSheet.create({
         lineHeight: 24
     },
     bottomSection: {
-        marginTop: 5
+        marginTop: 5,
+        alignItems: 'center'
     },
     bottomText: {
         color: '#999',
-        fontWeight: '200'
+        fontWeight: '200',
+        marginLeft: 5
     },
 })

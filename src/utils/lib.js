@@ -86,3 +86,10 @@ export function getBookByISBN(isbn) {
         method: 'GET'
     })
 }
+// 获取豆瓣今日精选
+export function getTodayRecommend() {
+    return $http({
+        url: api.getTodayRecommend,
+        method: 'GET'
+    })
+}

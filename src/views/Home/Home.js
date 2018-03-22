@@ -1,9 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, Image, ScrollView, RefreshControl, Dimensions, Alert} from 'react-native';
+import { WebBrowser } from 'expo';
 
 import SearchHeader from '../../components/searchHeader'
 import ListContainer from '../../components/ListContainer'
 import ListItem from '../../components/ListItemHome'
+
+import { getTodayRecommend } from '../../utils/lib'
 
 export default class HomeView extends React.Component {
     constructor(props) {
@@ -11,19 +14,37 @@ export default class HomeView extends React.Component {
         this.state = {
             text: 'search your food',
             isRefreshing: false,
+            todayRecommend: [],
         };
     }
 
     componentWillMount() {
-        
+        storage.load({
+            key: 'homeData'
+        }).then(data => {
+            if (data.todayRecommend) {
+                this.setState({ todayRecommend: data.todayRecommend })
+            } else {
+                this._onRefresh();
+            }
+        }).catch(err => this._onRefresh())
     }
 
     _onRefresh = () => {
         this.setState({ isRefreshing: true });
-        setTimeout(() => {
-            console.log("refreshing done!")
-            this.setState({ isRefreshing: false })
-        }, 1000)
+        getTodayRecommend().then(res => {
+            if (res) {
+                this.setState({ todayRecommend: res })
+                storage.save({
+                    key: 'homeData',
+                    data: {
+                        todayRecommend: res
+                    },
+                    expires: 1000 * 3600
+                })
+            }
+            this.setState({ isRefreshing: false });
+        }).catch(err => { this.setState({ isRefreshing: false }); })
     }
 
     _onScroll = () => {
@@ -54,42 +75,30 @@ export default class HomeView extends React.Component {
                         />
                     }>  
                     <View style={styles.recommendContainer}>
-                        <ListContainer
-                            listTitle="热点">
-                            <ListItem
-                                mainTitle="格林兄弟的抗争：“国王违宪了！"
-                                descTitle="雅各布·格林和威廉·根林不仅因《格林童话》而闻名天下，在他们那个时代，他们 雅各布·格林和威廉·根林不仅因《格林童话》而闻名天下，在他们那个时代，他们"
-                                imgUrl="https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2504505108,1276511427&fm=27&gp=0.jpg"
-                                author="真知社"
-                                label="今日热点"
-                                onListClick={() => navigate('DetailView')} />
-                            <ListItem
-                                mainTitle="格林兄弟的抗争：“国王违宪了！"
-                                descTitle="雅各布·格林和威廉·根林不仅因《格林童话》而闻名天下，在他们那个时代，他们 雅各布·格林和威廉·根林不仅因《格林童话》而闻名天下，在他们那个时代，他们"
-                                imgUrl="https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2504505108,1276511427&fm=27&gp=0.jpg"
-                                author="真知社"
-                                label="今日热点"
-                                onListClick={() => navigate('DetailView')} />
-                        </ListContainer> 
-
-                        <ListContainer
-                            listTitle="热点">
-                            <ListItem
-                                mainTitle="格林兄弟的抗争：“国王违宪了！"
-                                descTitle="雅各布·格林和威廉·根林不仅因《格林童话》而闻名天下，在他们那个时代，他们 雅各布·格林和威廉·根林不仅因《格林童话》而闻名天下，在他们那个时代，他们"
-                                imgUrl="https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2504505108,1276511427&fm=27&gp=0.jpg"
-                                author="真知社"
-                                label="今日热点"
-                                onListClick={() => navigate('DetailView')} />
-                            <ListItem
-                                mainTitle="格林兄弟的抗争：“国王违宪了！"
-                                descTitle="雅各布·格林和威廉·根林不仅因《格林童话》而闻名天下，在他们那个时代，他们 雅各布·格林和威廉·根林不仅因《格林童话》而闻名天下，在他们那个时代，他们"
-                                imgUrl="https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2504505108,1276511427&fm=27&gp=0.jpg"
-                                author="真知社"
-                                label="今日热点"
-                                onListClick={() => navigate('DetailView')} />
-                        </ListContainer> 
-                       
+                    {
+                        this.state.todayRecommend.length > 0 ? (
+                            <ListContainer
+                                listTitle="今日精选">
+                                {
+                                    this.state.todayRecommend.map(item => {
+                                        if (item.title) {
+                                            return(
+                                                <ListItem
+                                                    key={item.id}
+                                                    mainTitle={item.title}
+                                                    descTitle={item.desc}
+                                                    imgUrl={item.image}
+                                                    author={item.author.name}
+                                                    authorImage={item.author.avatar}
+                                                    label="今日精选"
+                                                    onListClick={() => WebBrowser.openBrowserAsync(item.pointUrl)} />
+                                            )
+                                        }
+                                    })
+                                }
+                            </ListContainer> 
+                        ) : (null)
+                    }
                     </View>   
                 </ScrollView>
             </View>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Alert, Dimensions } from 'react-native';
-import { BarCodeScanner, Permissions } from 'expo';
-import { WebBrowser } from 'expo';
+import { BarCodeScanner, Permissions, WebBrowser } from 'expo';
 
 import { getBookByISBN } from '../utils/lib'
 

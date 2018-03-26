@@ -2,8 +2,6 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, SectionList } from 'react-native';
 import { Video } from 'expo';
 
-// export default VideoList = (props) => {
-
 export default class VideoList extends React.Component {
     constructor(props) {
         super(props);

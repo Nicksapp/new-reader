@@ -93,3 +93,19 @@ export function getTodayRecommend() {
         method: 'GET'
     })
 }
+
+// 收藏项目
+export function postCollection(params) {
+    return $http({
+        url: api.postCollection,
+        method: 'POST',
+        params
+    })
+}
+// chakan收藏项目
+export function getCollection(params) {
+    return $http({
+        url: `${api.getCollection}?where={"user_id":"${params.user_id}"}`,
+        method: 'GET',
+    })
+}

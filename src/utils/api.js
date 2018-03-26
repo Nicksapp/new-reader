@@ -9,6 +9,10 @@ export default {
     registerUser: `${api}/users`,
     // 登录
     loginUser: `${api}/login`,
+    // 收藏项目
+    postCollection: `${api}/classes/collection`,
+    // 查看收藏
+    getCollection: `${api}/classes/collection`,
 
     // 正在上映
     getMovieInTheaters: `${douban}/movie/in_theaters`,

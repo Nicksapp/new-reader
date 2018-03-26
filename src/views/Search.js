@@ -211,7 +211,7 @@ export default class Search extends React.Component {
                         data: {
                             searchTextArr: data.searchTextArr
                         },
-                        expires: 1000 * 3600 * 7
+                        expires: 1000 * 3600 * 24 * 7
                     }).then(() => {
                         this.setState({
                             searchTextArr: data.searchTextArr
@@ -223,7 +223,7 @@ export default class Search extends React.Component {
                         data: {
                             searchTextArr: [this.state.text]
                         },
-                        expires: 1000 * 3600 * 7
+                        expires: 1000 * 3600 * 24 * 7
                     }).then(() => {
                         this.setState({
                             searchTextArr: [this.state.text]
@@ -236,7 +236,7 @@ export default class Search extends React.Component {
                     data: {
                         searchTextArr: [this.state.text]
                     },
-                    expires: 1000 * 3600 * 7
+                    expires: 1000 * 3600 * 24 * 7
                 }).then(() => {
                     this.setState({
                         searchTextArr: [this.state.text]

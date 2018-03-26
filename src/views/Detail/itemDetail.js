@@ -4,7 +4,7 @@ import CommentItem from '../../components/commentItem'
 import Star from '../../components/star'
 import Loading from '../../components/loading'
 
-import { getMovieSubject, getBookById, getBookAnnotations } from '../../utils/lib'
+import { getMovieSubject, getBookById, getBookAnnotations, postCollection } from '../../utils/lib'
 
 export default class ItemDetail extends React.Component {
     constructor(props) {
@@ -75,7 +75,7 @@ export default class ItemDetail extends React.Component {
                                 
                             </View>
                             <View style={{marginTop: 25}}>
-                                <TouchableOpacity style={styles.mainBtn}>
+                                <TouchableOpacity onPress={() => this.handleToCollect()} style={styles.mainBtn}>
                                     <Text style={{color: '#ffa000'}}>收藏</Text>
                                 </TouchableOpacity>
                             </View>
@@ -224,7 +224,7 @@ export default class ItemDetail extends React.Component {
         const { id, type } = this.props.navigation.state.params;
         const { goBack } = this.props.navigation;
         if (!id) {
-            alertDefault('查找错误！');
+            Alert.alert('查找错误！');
             this.props.navigation.goBack();
             return false;
         }
@@ -238,7 +238,7 @@ export default class ItemDetail extends React.Component {
                 break;
             }
             default: {
-                alertDefault('暂不支持此类详情的访问！');
+                Alert.alert('暂不支持此类详情的访问！');
                 goBack();
             }
         }
@@ -251,7 +251,7 @@ export default class ItemDetail extends React.Component {
         ]).then(values => {
             values.forEach(res => {
                 if (!res) {
-                    alertDefault('网络请求异常！');
+                    Alert.alert('网络请求异常！');
                     this.setState({ loading: false })
                     return false;
                 }
@@ -268,7 +268,7 @@ export default class ItemDetail extends React.Component {
         ]).then(values => {
             values.forEach(res => {
                 if (!res) {
-                    alertDefault('网络请求异常！');
+                    Alert.alert('网络请求异常！');
                     this.setState({ loading: false })
                     return false;
                 }
@@ -293,7 +293,31 @@ export default class ItemDetail extends React.Component {
                 textAuthor: ''
             })
         }
-        
+    }
+
+    handleToCollect = () => {
+        const { id, images, title } = this.state.itemDetail;
+        let postData = {
+            collection_id: id,
+            img_url: images.small,
+            title
+        };
+        storage.load({
+            key: 'loginState'
+        }).then(data => {
+            if (data && data.sessionToken) {
+                postData.user_id = data.objectId;
+                postData.username = data.username;
+            }
+            return postData;
+        }).then(data => {
+            postCollection(data).then(res => {
+                console.log(res)
+                if (res && res.objectId) {
+                    Alert.alert('收藏成功！');
+                }
+            }).catch(err => Alert.alert(err))
+        }).catch(err => Alert.alert('请登录后再尝试操作！'))
     }
 } 
 

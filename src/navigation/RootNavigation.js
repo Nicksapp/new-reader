@@ -13,6 +13,7 @@ import articleDetail from '../views/Detail/articleDetail'
 import itemDetail from '../views/Detail/itemDetail'
 import Login from '../views/Login/login'
 import Regisiter from '../views/Login/regisiter'
+import Collection from '../views/Collection/collection'
 
 const RootStackNavigator = StackNavigator(
     {
@@ -39,6 +40,12 @@ const RootStackNavigator = StackNavigator(
             screen: itemDetail,
             navigationOptions: {
                 title: '详情',
+            },
+        },
+        CollectionView: {  
+            screen: Collection,
+            navigationOptions: {
+                // title: '收藏',
             },
         },
         SearchView: {  

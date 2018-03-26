@@ -27,7 +27,7 @@ export default class ProfileActionList extends React.Component {
                 activeOpacity={1} 
                 onPress={() => 
                     this.state.loginState && this.state.loginState.sessionToken && section.item.navigateTo ? 
-                    this.props.onNavigatorClick(section.item.navigateTo) :
+                    this.props.onNavigatorClick(section.item.navigateTo, section.item.title) :
                     this.props.onNavigatorClick('LoginView')}
                 style={styles.cellWrapper}>
                 <View style={styles.cellPart}>

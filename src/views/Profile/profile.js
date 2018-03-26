@@ -23,7 +23,7 @@ export default class ProfileView extends React.Component {
                         loginState={this.state.loginState}
                         onLoginClick={() => navigate('LoginView')} />
                     <ProfileActionList 
-                        onNavigatorClick={(page) => navigate(page)} />
+                        onNavigatorClick={(page, title) => navigate(page, {title})} />
 
                     {
                         this.state.loginState && this.state.loginState.sessionToken ? (

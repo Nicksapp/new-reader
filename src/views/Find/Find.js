@@ -178,7 +178,7 @@ export default class FindView extends React.Component {
                     series2Name: values[4].books[0].series.title,
                     series3Name: values[5].books[0].series.title,
                 },
-                expires: 1000 * 3600
+                expires: 1000 * 3600 * 24
             })
         }).catch(err => { return false })
     }

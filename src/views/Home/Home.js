@@ -40,7 +40,7 @@ export default class HomeView extends React.Component {
                     data: {
                         todayRecommend: res
                     },
-                    expires: 1000 * 3600
+                    expires: 1000 * 3600 * 24 * 30
                 })
             }
             this.setState({ isRefreshing: false });

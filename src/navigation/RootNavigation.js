@@ -15,6 +15,8 @@ import Login from '../views/Login/login'
 import Regisiter from '../views/Login/regisiter'
 import Collection from '../views/Collection/collection'
 
+import NoteEdit from '../views/Note/noteEdit'
+
 const RootStackNavigator = StackNavigator(
     {
         Main: {
@@ -85,6 +87,18 @@ const RootStackNavigator = StackNavigator(
                     backgroundColor: '#0096ff'
                 },
                 headerTintColor: '#ffffff',
+            },
+        },
+        NoteEditModal: {
+            screen: NoteEdit,
+            navigationOptions: {
+                title: '写笔记',
+                headerStyle: {
+                    backgroundColor: '#0096ff'
+                },
+                headerTintColor: '#ffffff',
+                mode: 'modal',
+                headerMode: 'none',
             },
         },
     },

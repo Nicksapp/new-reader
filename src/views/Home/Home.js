@@ -7,6 +7,7 @@ import ListContainer from '../../components/ListContainer'
 import ListItem from '../../components/ListItemHome'
 
 import { getTodayRecommend } from '../../utils/lib'
+import { tempHomeData } from '../../api/tempHomeData'
 
 export default class HomeView extends React.Component {
     constructor(props) {
@@ -22,9 +23,17 @@ export default class HomeView extends React.Component {
         storage.load({
             key: 'homeData'
         }).then(data => {
-            if (data.todayRecommend) {
+            if (data.todayRecommend && data.todayRecommend.length) {
                 this.setState({ todayRecommend: data.todayRecommend })
             } else {
+                storage.save({
+                    key: 'homeData',
+                    data: {
+                        todayRecommend: tempHomeData
+                    },
+                    expires: 1000 * 3600 * 24 * 30
+                })
+                this.setState({ todayRecommend : tempHomeData })
                 this._onRefresh();
             }
         }).catch(err => this._onRefresh())
@@ -33,7 +42,7 @@ export default class HomeView extends React.Component {
     _onRefresh = () => {
         this.setState({ isRefreshing: true });
         getTodayRecommend().then(res => {
-            if (res) {
+            if (res && res.length) {
                 this.setState({ todayRecommend: res })
                 storage.save({
                     key: 'homeData',

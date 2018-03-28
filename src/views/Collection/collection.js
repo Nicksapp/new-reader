@@ -17,14 +17,17 @@ export default class Collection extends React.Component {
     }
 
     _renderItem = (section) => {
+        const { navigate } = this.props.navigation;
         return (
             <TouchableOpacity
+                onPress={() => { navigate('ItemDetaillView', { id: section.item.collection_id, type: section.item.type === 'BOOK' ?'BOOK' : 'MOVIE' }) }}
+                activeOpacity={1}
                 style={styles.cellContainer}
                 key={section.item.collection_id}>
                 <View style={styles.cellPart}>
                     <View style={{ flexDirection: 'row' }}>
-                        <Image style={{ width: 32, height: 24, resizeMode: 'contain' }} source={{ uri: section.item.img_url}}></Image>
-                        <Text style={{ marginLeft: 15, lineHeight: 26, }}>{section.item.title}</Text>
+                        <Image style={{ width: 42, height: 24, resizeMode: 'contain' }} source={{ uri: section.item.img_url}}></Image>
+                        <Text style={{ marginLeft: 15, lineHeight: 24, fontSize: 16}}>{section.item.title}</Text>
                     </View>
                     <Ionicons
                         name={Platform.OS === 'ios'
@@ -55,12 +58,13 @@ export default class Collection extends React.Component {
 
     componentDidMount() {
         const { title } = this.props.navigation.state.params;
-        this.setState({loading: true})
+        
         switch (title) {
             case '收藏': {
                 storage.load({
                     key: 'loginState'
                 }).then(data => {
+                    this.setState({ loading: true })
                     console.log(data)
                     if (data && data.objectId) {
                         const user_id = data.objectId;
@@ -73,6 +77,7 @@ export default class Collection extends React.Component {
                                 key: 'a',
                                 data: results
                             }]
+                            console.log(source)
                             this.setState({
                                 source,
                                 loading: false
@@ -110,6 +115,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         paddingTop: 15,
         paddingLeft: 20,
+        flex: 1
     },
     cellPart: {
         borderBottomWidth: 1,

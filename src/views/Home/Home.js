@@ -20,6 +20,8 @@ export default class HomeView extends React.Component {
     }
 
     componentWillMount() {
+        // this.props.navigation.navigate('NoteDetail')
+
         storage.load({
             key: 'homeData'
         }).then(data => {

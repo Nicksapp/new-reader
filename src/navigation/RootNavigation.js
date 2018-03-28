@@ -16,6 +16,7 @@ import Regisiter from '../views/Login/regisiter'
 import Collection from '../views/Collection/collection'
 
 import NoteEdit from '../views/Note/noteEdit'
+import NodeDetail from '../views/Note/nodeDetail'
 
 const RootStackNavigator = StackNavigator(
     {
@@ -83,6 +84,16 @@ const RootStackNavigator = StackNavigator(
             screen: Camera,
             navigationOptions: {
                 title: 'Camera',
+                headerStyle: {
+                    backgroundColor: '#0096ff'
+                },
+                headerTintColor: '#ffffff',
+            },
+        },
+        NoteDetail: {  // 测试 导航页
+            screen: NodeDetail,
+            navigationOptions: {
+                title: '笔记详情',
                 headerStyle: {
                     backgroundColor: '#0096ff'
                 },

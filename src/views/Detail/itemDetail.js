@@ -296,11 +296,12 @@ export default class ItemDetail extends React.Component {
     }
 
     handleToCollect = () => {
-        const { id, images, title } = this.state.itemDetail;
+        const { id, images, title, subtype } = this.state.itemDetail;
         let postData = {
             collection_id: id,
             img_url: images.small,
-            title
+            title,
+            type: subtype ? subtype : 'BOOK'
         };
         storage.load({
             key: 'loginState'

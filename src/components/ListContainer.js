@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
- 
+import PropType from 'prop-types';
+
 export default ListContainer = (props) => {
     return(
         <View style={styles.listWrapper}>
@@ -10,6 +11,9 @@ export default ListContainer = (props) => {
             {props.children}
         </View>
     )
+}
+ListContainer.propTypes = {
+    listTitle: PropType.string
 }
 
 const styles = StyleSheet.create({

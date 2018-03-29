@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, ScrollView, Alert } from 'react-native';
-import { getCollection } from '../../utils/lib'
+import { getCollection, postBookNote } from '../../utils/lib'
 import Loading from '../../components/loading'
 
 export default class NoteEdit extends React.Component {
@@ -80,6 +80,16 @@ export default class NoteEdit extends React.Component {
         )
     }
 
+    componentWillMount () {
+        const params = this.props.navigation.state.params;
+        if (params && params.itemInfo) {
+            this.setState({
+                curItem: params.itemInfo,
+                curItemName: params.itemInfo.title
+            })
+        }
+    }
+
     componentDidMount() {
         storage.load({
             key: 'loginState'
@@ -105,7 +115,37 @@ export default class NoteEdit extends React.Component {
     }
 
     handleSubmitNote = () => {
+        const { goBack } = this.props.navigation;
+        let fromData = {
+            title: this.state.title,
+            content: this.state.content,
+            itemInfo: this.state.curItem
+        }
+        if (!fromData.title || !fromData.content) {
+            Alert.alert('存在未填项！');
+            return false;
+        } else if (!fromData.itemInfo.collection_id) {
+            Alert.alert('请选择要记录笔记的图书！');
+            return false;
+        }
 
+        storage.load({
+            key: 'loginState'
+        }).then(data => {
+            if (data && data.sessionToken) {
+                fromData.user_id = data.objectId;
+                fromData.username = data.username;
+            }
+            return fromData;
+        }).then(data => {
+            postBookNote(data).then(res => {
+                if (res && res.objectId) {
+                    Alert.alert('笔记记录成功！');
+                    goBack();
+                }
+            }).catch(err => Alert.alert('笔记添加失败，请重新尝试！'))
+        }).catch(err => Alert.alert(err))
+        
     }
 
 }

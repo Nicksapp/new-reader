@@ -109,3 +109,25 @@ export function getCollection(params) {
         method: 'GET',
     })
 }
+// 记录某本书的笔记
+export function postBookNote(params) {
+    return $http({
+        url: api.postBookNote,
+        method: 'POST',
+        params
+    })
+}
+// 获得所有 lc 中的笔记
+export function getBookNote() {
+    return $http({
+        url: api.getBookNote,
+        method: 'GET',
+    })
+}
+// 获得个人笔记
+export function getBookNoteByUser(params) {
+    return $http({
+        url: `${api.getBookNote}?where={"user_id":"${params.user_id}"}`,
+        method: 'GET',
+    })
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, SectionList, Platform, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { getCollection } from '../../utils/lib'
+import { getCollection, getBookNoteByUser } from '../../utils/lib'
 import Loading from '../../components/loading'
 
 export default class Collection extends React.Component {
@@ -20,7 +20,7 @@ export default class Collection extends React.Component {
         const { navigate } = this.props.navigation;
         return (
             <TouchableOpacity
-                onPress={() => { navigate('ItemDetaillView', { id: section.item.collection_id, type: section.item.type === 'BOOK' ?'BOOK' : 'MOVIE' }) }}
+                onPress={() => this.handleToViewInfo(section.item)}
                 activeOpacity={1}
                 style={styles.cellContainer}
                 key={section.item.collection_id}>
@@ -65,13 +65,43 @@ export default class Collection extends React.Component {
                     key: 'loginState'
                 }).then(data => {
                     this.setState({ loading: true })
-                    console.log(data)
                     if (data && data.objectId) {
                         const user_id = data.objectId;
                         getCollection({ user_id }).then(res => {
                             const { results = [] } = res;
                             for (var i = 0; i < results.length; i++) {
                                 results[i].key = results[i].objectId
+                            }
+                            const source = [{
+                                key: 'a',
+                                data: results
+                            }]
+                            this.setState({
+                                source,
+                                loading: false
+                            })
+                        })
+                    }
+                }).catch(err => {
+                    Alert.alert('请登录后再尝试操作！')
+                    this.setState({ loading: false })
+                })
+                break;
+            }
+            case '笔记': {
+                storage.load({
+                    key: 'loginState'
+                }).then(data => {
+                    this.setState({ loading: true })
+                    if (data && data.objectId) {
+                        const user_id = data.objectId;
+                        getBookNoteByUser({ user_id }).then(res => {
+                            const { results = [] } = res;
+                            for (var i = 0; i < results.length; i++) {
+                                results[i].key = results[i].objectId
+                                results[i].collection_id = results[i].itemInfo.collection_id
+                                results[i].img_url = results[i].itemInfo.img_url
+                                results[i].type = results[i].itemInfo.type
                             }
                             const source = [{
                                 key: 'a',
@@ -92,6 +122,17 @@ export default class Collection extends React.Component {
             }
             default: this.setState({ loading: false });
         }
+    }
+
+    handleToViewInfo = (dataSource) => {
+        const { title } = this.props.navigation.state.params;
+        const { navigate } = this.props.navigation;
+        switch(title) {
+            case '收藏': navigate('ItemDetaillView', { id: dataSource.collection_id, type: dataSource.type === 'BOOK' ? 'BOOK' : 'MOVIE' }); break;
+            case '笔记': navigate('NoteDetail', { dataSource }); break;
+
+        }
+    
     }
 
     fetchDataByType(type) {

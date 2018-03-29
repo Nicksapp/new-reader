@@ -1,80 +1,111 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, Image, Dimensions, Platform, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, Image, Dimensions, Platform, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { getBookNote } from '../../utils/lib'
+
+import Loading from '../../components/loading'
 
 export default class NoteView extends React.Component {
     constructor() {
         super();
         this.state = {
-
+            noteData: [],
+            loading: false,
+            isRefreshing: false,
         }
     }
 
     render () {
         const width = Dimensions.get('window').width;
         const { navigate } = this.props.navigation;
-        return (
-            <View style={styles.container}>
-                <View style={{ flex: 1, alignItems: 'flex-start',flexDirection: 'row', flexWrap: 'wrap'}}>
-                    <TouchableOpacity activeOpacity={1} onPress={() => navigate('NoteDetail')}>
-                        <View style={{width: width/2-20 , backgroundColor: '#fff', padding: 10, margin: 5}}>
-                            <Text style={{fontSize: 16, color: '#333', fontWeight: '500'}}>标题标题</Text>
-                            <Text style={{ marginTop: 5, color: '#444' }}>分为范围分玩法we分为范围范围分为非非法违法未分为范围分为范围分玩法we分为范围范围分为非非法违法未分为范围分为范围分玩法we分为范围范围分为非非法违法未分为范围分为范围分玩法we分为范围范围分为非非法违法未分为范围</Text>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10}}>
-                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                    <Image style={{width: 22, height: 22, borderRadius: 11}} source={{ uri: 'https://img3.doubanio.com/view/note/large/public/p48970612.jpg'}}></Image>
-                                    <Text style={{marginLeft: 5, fontSize: 12, color: '#666'}}>喵小姐</Text>
-                                </View>
-                                <Text style={{ fontSize: 12, color: '#666' }}>2018-03-06</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={1} onPress={() => navigate('NoteDetail')}>
-                        <View style={{width: width/2-20 , backgroundColor: '#fff', padding: 10, margin: 5}}>
-                            <Text style={{fontSize: 16, color: '#333', fontWeight: '500'}}>标题标题</Text>
-                            <Text style={{ marginTop: 5, color: '#444' }}>分为范围分玩法we分为范围范围分为非非法违法未分为范围分为范围分玩法we分为范围范围分为非非法违法未分为范围分为范围分玩法we分为范围范围分为非非法违法未分为范围分为范围分玩法we分为范围范围分为非非法违法未分为范围</Text>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10}}>
-                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                    <Image style={{width: 22, height: 22, borderRadius: 11}} source={{ uri: 'https://img3.doubanio.com/view/note/large/public/p48970612.jpg'}}></Image>
-                                    <Text style={{marginLeft: 5, fontSize: 12, color: '#666'}}>喵小姐</Text>
-                                </View>
-                                <Text style={{ fontSize: 12, color: '#666' }}>2018-03-06</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={1} onPress={() => navigate('NoteDetail')}>
-                        <View style={{width: width/2-20 , backgroundColor: '#fff', padding: 10, margin: 5}}>
-                            <Text style={{fontSize: 16, color: '#333', fontWeight: '500'}}>标题标题</Text>
-                            <Text style={{ marginTop: 5, color: '#444' }}>分为范围分玩法we分为范围范分为范围分玩法we分为范围范围分为非非法违法未分为范围分为范围分玩法we分为范围范围分为非非法违法未分为范围</Text>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10}}>
-                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                    <Image style={{width: 22, height: 22, borderRadius: 11}} source={{ uri: 'https://img3.doubanio.com/view/note/large/public/p48970612.jpg'}}></Image>
-                                    <Text style={{marginLeft: 5, fontSize: 12, color: '#666'}}>喵小姐</Text>
-                                </View>
-                                <Text style={{ fontSize: 12, color: '#666' }}>2018-03-06</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={1} onPress={() => navigate('NoteDetail')}>
-                        <View style={{width: width/2-20 , backgroundColor: '#fff', padding: 10, margin: 5}}>
-                            <Text style={{fontSize: 16, color: '#333', fontWeight: '500'}}>标题标题</Text>
-                            <Text style={{ marginTop: 5, color: '#444' }}>分为范围分玩法we分为范围范围分为非非法违法未分为范围分为范围分玩法we分为范围范围分为非非法违法未分为范围分为范围</Text>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10}}>
-                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                    <Image style={{width: 22, height: 22, borderRadius: 11}} source={{ uri: 'https://img3.doubanio.com/view/note/large/public/p48970612.jpg'}}></Image>
-                                    <Text style={{marginLeft: 5, fontSize: 12, color: '#666'}}>喵小姐</Text>
-                                </View>
-                                <Text style={{ fontSize: 12, color: '#666' }}>2018-03-06</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                   
 
+        if (this.state.loading) {
+            return (
+                <Loading />
+            )
+        } else {
+            return (
+                <View style={styles.container}>
+                    <ScrollView
+                        scrollEventThrottle={100}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={this.state.isRefreshing}
+                                onRefresh={this._onRefresh}
+                                colors={['#666666']}
+                                tintColor="#666666"
+                                title="loading..."
+                                titleColor="#666666"
+                                progressBackgroundColor="white"
+                            />
+                        }>  
+                        <View style={{ flex: 1, alignItems: 'flex-start',flexDirection: 'row', flexWrap: 'wrap'}}>
+                        {
+                            this.state.noteData.map(item => {
+                                return (
+                                    <TouchableOpacity key={item.objectId} activeOpacity={1} onPress={() => this.handleToViewNote(item)}>
+                                        <View style={{width: width/2-20 , backgroundColor: '#fff', padding: 10, margin: 5}}>
+                                            <Text style={{fontSize: 16, color: '#333', fontWeight: '500'}}>{item.title}</Text>
+                                            <Text style={{ marginTop: 5, color: '#444' }}>{item.content}</Text>
+                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10}}>
+                                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                                    <Image style={{ width: 22, height: 22, borderRadius: 11 }} source={{ uri: item.itemInfo.img_url }}></Image>
+                                                    <Text style={{ marginLeft: 5, fontSize: 12, color: '#666', width: 60 }} numberOfLines={1}>{item.itemInfo.title}</Text>
+                                                </View>
+                                                <Text style={{ fontSize: 12, color: '#666' }}>{item.username}</Text>
+                                            </View>
+                                        </View>
+                                    </TouchableOpacity>
+                                )
+                            })
+                        }
+                        </View>
+                    </ScrollView>
                 </View>
-            </View>
-        )
+            )
+        }
+
+        
     }
 
+    componentWillMount() {
+        this.initData();
+    }
+
+    initData() {
+        this.setState({
+            loading: true
+        })
+        getBookNote().then(res => {
+            if (res && res.results) {
+                this.setState({
+                    noteData: res.results,
+                    loading: false,
+                })
+            } else {
+                this.setState({loading: false})
+            }
+        }).catch(err => { this.setState({ loading: false })})
+    }
+
+    _onRefresh = () => {
+        this.setState({ isRefreshing: true})
+        getBookNote().then(res => {
+            if (res && res.results) {
+                this.setState({
+                    noteData: res.results,
+                    isRefreshing: false,
+                })
+            } else {
+                this.setState({ isRefreshing: false })
+            }
+        }).catch(err => { this.setState({ isRefreshing: false }) })
+    }
+
+    handleToViewNote = (dataSource) => {
+        const { navigate } = this.props.navigation;
+        navigate('NoteDetail', { dataSource })
+    }
 }
 NoteView.navigationOptions = props => {
     const { navigation } = props;

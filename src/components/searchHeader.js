@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, TouchableHighlight, Platform, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
+import PropType from 'prop-types';
 export default class SearchHeader extends React.Component {
     constructor(props) {
         super(props);
@@ -25,6 +25,10 @@ export default class SearchHeader extends React.Component {
             </View>
         )
     } 
+}
+SearchHeader.propTypes = {
+    onSearchClick: PropType.func.isRequired,
+    onScanClick: PropType.func.isRequired,
 }
 
 const styles = StyleSheet.create({

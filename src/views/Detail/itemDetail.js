@@ -26,7 +26,7 @@ export default class ItemDetail extends React.Component {
             return (<Loading />)
         }
         return (
-            <View style={{ backgroundColor: '#eeeeee'}}>
+            <View style={{ backgroundColor: '#f5f5f5'}}>
                 <ScrollView>
                     <View style={styles.headerImage}>
                         <Image style={styles.mainImage} source={{ uri: this.state.itemDetail.images.large}}></Image>
@@ -87,7 +87,7 @@ export default class ItemDetail extends React.Component {
                                     {
                                         this.state.itemDetail.genres.map(item => {
                                             return (
-                                                <View key={item} style={{ paddingTop: 5, paddingBottom: 5, paddingLeft: 10, paddingRight: 10, backgroundColor: '#e6e6e6', margin: 3, borderRadius: 3 }}>
+                                                <View key={item} style={{ paddingTop: 5, paddingBottom: 5, paddingLeft: 10, paddingRight: 10, backgroundColor: '#e6e6e6', margin: 5, borderRadius: 4 }}>
                                                     <Text style={{ color: '#666' }}>{item}</Text>
                                                 </View>
                                             )
@@ -100,7 +100,7 @@ export default class ItemDetail extends React.Component {
                                     {
                                         this.state.itemDetail.tags.map(item => {
                                             return (
-                                                <View key={item.name} style={{paddingTop: 5, paddingBottom: 5, paddingLeft: 10, paddingRight: 10, backgroundColor: '#e6e6e6',margin: 3,borderRadius: 3}}>
+                                                <View key={item.name} style={{paddingTop: 5, paddingBottom: 5, paddingLeft: 10, paddingRight: 10, backgroundColor: '#e6e6e6',margin: 5,borderRadius: 4}}>
                                                     <Text style={{color: '#666'}}>{item.title}</Text>
                                                 </View>
                                             )
@@ -158,11 +158,12 @@ export default class ItemDetail extends React.Component {
                                             <Text style={styles.mainInfoTitle}>读书笔记</Text>
                                             <TouchableOpacity 
                                                 style={styles.miniBtn}
-                                                activeOpacity={1} onPress={() => Alert.alert('暂未开放')}>
+                                                activeOpacity={1} onPress={() => this.handleToNoteEdit()}>
                                                 <Text style={{color: '#43a047', fontSize: 12}}>写笔记</Text>
                                             </TouchableOpacity>
                                         </View>
                                         
+                                        {/* 笔记 */}
                                         <ScrollView
                                             horizontal={true}
                                             automaticallyAdjustContentInsets={false}
@@ -170,7 +171,7 @@ export default class ItemDetail extends React.Component {
                                             {
                                                 this.state.bookAnnotations.annotations.map(item => {
                                                     return (
-                                                        <View style={styles.noteCard} key={item.id}>
+                                                        <TouchableOpacity onPress={() => this.handleToViewNoteInfo(item)} style={styles.noteCard} key={item.id}>
                                                             <Text style={{ fontSize: 13, fontWeight: '500', color: '#333' }}>{item.chapter}</Text>
                                                             <Text style={{ fontSize: 12, color: '#424242', marginTop: 5, marginBottom: 5 }} numberOfLines={4}>{item.summary}</Text>
                                                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -179,7 +180,7 @@ export default class ItemDetail extends React.Component {
                                                                 </View>
                                                                 <Text style={{ fontSize: 11, color: '#757575' }}>{item.time}</Text>
                                                             </View>
-                                                        </View>
+                                                        </TouchableOpacity>
                                                     )
                                                 })
                                             }
@@ -190,8 +191,9 @@ export default class ItemDetail extends React.Component {
                         }
                         
                     </View>
-
-                    <View style={styles.commentSection}>
+                    
+                    {/* 评论 */}
+                    {/* <View style={styles.commentSection}>
                         <View style={styles.commentBar}>
                             <Text style={{fontSize: 16, fontWeight: '200', color: '#424242'}}>评论</Text>
                         </View>
@@ -210,7 +212,7 @@ export default class ItemDetail extends React.Component {
                                 <CommentItem />
                             </View>
                         </View>
-                    </View>
+                    </View> */}
                 </ScrollView>
             </View>
         )
@@ -313,12 +315,41 @@ export default class ItemDetail extends React.Component {
             return postData;
         }).then(data => {
             postCollection(data).then(res => {
-                console.log(res)
                 if (res && res.objectId) {
                     Alert.alert('收藏成功！');
                 }
             }).catch(err => Alert.alert(err))
         }).catch(err => Alert.alert('请登录后再尝试操作！'))
+    }
+
+    handleToViewNoteInfo = (item) => {
+        const { navigate } = this.props.navigation;
+        const dataSource = {
+            title: item.chapter,
+            username: item.author_user.name,
+            avatar: item.author_user.avatar,
+            createdAt: item.time,
+            content: item.content,
+            itemInfo: {
+                img_url: item.book.image,
+                title: item.book.title,
+                collection_id: item.book_id,
+                type: 'BOOK'
+            }
+        }
+        navigate('NoteDetail', { dataSource })
+    }
+
+    handleToNoteEdit = () => {
+        const { navigate } = this.props.navigation;
+        const { id, images, title} = this.state.itemDetail
+        const itemInfo = {
+            img_url: images.small,
+            title: title,
+            collection_id: id,
+            type: 'BOOK'
+        }
+        navigate('NoteEditModal', { itemInfo })
     }
 } 
 
@@ -349,8 +380,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     titleInfo: {
-        fontSize: 12,
-        lineHeight: 13,
+        fontSize: 13,
+        lineHeight: 18,
         color: '#757575'
     },
     pointCard: {

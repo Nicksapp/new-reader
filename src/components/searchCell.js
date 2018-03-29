@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import PropType from 'prop-types';
 
 export default SearchCell = (props) => {
     return (
@@ -14,6 +15,9 @@ export default SearchCell = (props) => {
             </View>
         </TouchableOpacity>
     )
+}
+SearchCell.propTypes = {
+    data: PropType.object.isRequired
 }
 
 const styles = StyleSheet.create({

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import PropType from 'prop-types';
 
 export default ListItemHome = (props) => {
     return (
@@ -27,6 +28,15 @@ export default ListItemHome = (props) => {
             </View>
         </TouchableOpacity>
     )
+}
+ListItemHome.propTypes = {
+    onListClick: PropType.func,
+    mainTitle: PropType.string,
+    descTitle: PropType.string,
+    imgUrl: PropType.string,
+    author: PropType.string,
+    authorImage: PropType.string,
+    label: PropType.string
 }
 
 const styles = StyleSheet.create({

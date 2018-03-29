@@ -13,6 +13,7 @@ export default {
     postCollection: `${api}/classes/collection`,
     // 查看收藏
     getCollection: `${api}/classes/collection`,
+    // 取消收藏
 
     // 正在上映
     getMovieInTheaters: `${douban}/movie/in_theaters`,
@@ -38,5 +39,13 @@ export default {
 
     // 获取豆瓣今日精选
     getTodayRecommend: `${leanclooud}/doubanhome`,
+
+    // 获得标签下所有书籍
+    getBookByTag: `${douban}/book/search`, // query: tag = ''
+    // 记录某本书的笔记
+    postBookNote: `${api}/classes/note`,
+    // 获得所有 lc 中的笔记
+    getBookNote: `${api}/classes/note`,
+    // 删除指定笔记
     
 }

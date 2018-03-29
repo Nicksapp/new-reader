@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import PropType from 'prop-types';
+
 import Star from '../components/star'
 
 export default FindItemList = (props) => {
@@ -36,8 +38,9 @@ export default FindItemList = (props) => {
         
     )
 }
-FindItemList.defaultProps = {
-    source: [],
+FindItemList.propTypes = {
+    sectionName: PropType.string,
+    source: PropType.array,
 };
 
 const styles = StyleSheet.create({

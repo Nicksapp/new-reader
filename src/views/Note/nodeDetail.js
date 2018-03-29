@@ -1,38 +1,62 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from 'react-native';
 
 export default class NoteDetail extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            dataSource: {},
+        }
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <View>
-                    <Text style={{fontSize: 24, fontWeight: '600', color: '#333'}}>第116页 | 互相交换各自的碎片</Text>
+                <ScrollView>
+                    <Text style={{fontSize: 24, fontWeight: '600', color: '#333'}}>{this.state.dataSource.title}</Text>
                     <View style={{flexDirection: 'row', marginTop: 10, marginBottom: 20}}>
-                        <View style={{flex: 1}}>
-                            <Image style={{ width: 48, height: 48, resizeMode: 'cover', borderRadius: 24, borderWidth: 1, borderColor: '#fff' }} source={{ uri: 'https://img3.doubanio.com/view/note/large/public/p48970612.jpg' }}></Image>
-                        </View>
-                        <View style={{flex: 6, justifyContent: 'center'}}>
-                            <Text>影随英东 <Text style={{fontSize: 13, color: '#666'}}>的读书笔记</Text></Text>
-                            <Text style={{fontSize: 12, color: '#666'}}>2018-02-05</Text>
+                        <TouchableOpacity style={{ flex: 1 }} onPress={() => this.handleToViewInfo()}>
+                            <Image style={{ width: 48, height: 48, resizeMode: 'cover', borderRadius: 24, borderWidth: 1, borderColor: '#fff' }} source={{ uri: this.state.dataSource.itemInfo.img_url }}></Image>
+                        </TouchableOpacity>
+                        <View style={{flex: 6, justifyContent: 'center', marginLeft: 10}}>
+                            <Text>{this.state.dataSource.itemInfo.title}</Text>
+                            <Text>{this.state.dataSource.username} <Text style={{fontSize: 13, color: '#666'}}>的心得笔记</Text></Text>
+                            <Text style={{ fontSize: 12, color: '#666' }}>{this.state.dataSource.createdAt.slice(0, 10)}</Text>
                         </View>
                     </View>
-                    <Text style={{fontSize: 16, color: '#333', lineHeight: 24}}>我是这样认为的，需要我是这样认为的，需要我是这样认为的，需要我是这样认为的，需要我是这样认为的，需要我是这样认为的，需要我是这样认为的，需要我是这样认为的，需要我是这样认为的，需要我是这样认为的，需要</Text>
-                </View>
+                    <Text style={{ fontSize: 16, color: '#333', lineHeight: 24 }}>{this.state.dataSource.content}</Text>
+                </ScrollView>
                 
 
             </View>
         )
     }
 
+    componentWillMount() {
+        this.initData();
+    }
+
+    initData() {
+        const { dataSource } = this.props.navigation.state.params;
+        const { goBack } = this.props.navigation;
+        if (!dataSource) {
+            Alert.alert('请求错误了！');
+            this.props.navigation.goBack();
+            return false;
+        }
+        this.setState({
+            dataSource: Object.assign({}, dataSource)
+        })
+    }
+
+    handleToViewInfo = () => {
+        const { navigate } = this.props.navigation;
+        const id = this.state.dataSource.itemInfo.collection_id;
+        const type = this.state.dataSource.itemInfo.type;
+        navigate('ItemDetaillView', { id, type: type === 'BOOK' ? 'BOOK' : 'MOVIE' })
+    }
 }
-NoteDetail.defaultProps = {
-    loginState: {},
-};
 
 const styles = StyleSheet.create({
     container: {

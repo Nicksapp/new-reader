@@ -90,7 +90,7 @@ const RootStackNavigator = StackNavigator(
                 headerTintColor: '#ffffff',
             },
         },
-        NoteDetail: {  // 测试 导航页
+        NoteDetail: {  
             screen: NodeDetail,
             navigationOptions: {
                 title: '笔记详情',

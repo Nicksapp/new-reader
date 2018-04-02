@@ -1,12 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, Image, ScrollView} from 'react-native';
-import { Video } from 'expo';
+import { Video, WebBrowser } from 'expo';
 import ScrollableTabView, {DefaultTabBar} from 'react-native-scrollable-tab-view';
 import FindItemList from '../../components/findItemList'
 import FindItemColumnList from '../../components/findItemColumnList'
-import VideoList from '../../components/videoList'
 
-import { getMovieInTheaters, getMovieCommingSoon, getMovieTop250, getBookBySeries } from '../../utils/lib'
+import LessonFlatItem from '../../components/lessonFlatList'
+
+import { getMovieInTheaters, getMovieCommingSoon, getMovieTop250, getBookBySeries, getMoocList } from '../../utils/lib'
 import { alertDefault } from '../../utils/utils'
 
 import Loading from '../../components/loading'
@@ -25,6 +26,8 @@ export default class FindView extends React.Component {
             series2Name: '',
             series3Name: '',
             loading: false,
+
+            lessonList: [],
         }
     }
 
@@ -63,23 +66,13 @@ export default class FindView extends React.Component {
                     </ScrollView>
                     
                     <ScrollView tabLabel="课程" >
-                        <VideoList source={
-                            [{ 
-                                key: 'a', 
-                                data: [
-                                    { 
-                                        key: '123',
-                                        url: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
-                                        title: '测量物质密度归类分析',
-                                        desc: '测量物质密度归类分析'
-                                    }, {
-                                        key: '422',
-                                        url: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
-                                        title: '测量物质密度归类分析',
-                                        desc: '测量物质密度归类分析'
-                                    }
-                                ]
-                            }]} />
+                        {
+                            this.state.loading ? (<Loading />) : (
+                                <LessonFlatItem 
+                                    source={this.state.lessonList}
+                                    onItemClick={this.handleLessonClick}></LessonFlatItem>
+                            )
+                        }
                     </ScrollView>
 
                     <ScrollView tabLabel="电影">
@@ -124,8 +117,10 @@ export default class FindView extends React.Component {
                     series1Name: data.series1Name,
                     series2Name: data.series2Name,
                     series3Name: data.series3Name,
+                    lessonList: data.lessonList,
                     loading: false
                 })
+                // this.initData();
             }
         }).catch(err=> {
             this.initData();
@@ -144,6 +139,7 @@ export default class FindView extends React.Component {
             getBookBySeries(seriesId1),
             getBookBySeries(seriesId2),
             getBookBySeries(seriesId3),
+            getMoocList(1),
         ]).then(values => {
             values.forEach(res => {
                 if (!res) {
@@ -162,6 +158,7 @@ export default class FindView extends React.Component {
                 series2Name: values[4].books[0].series.title,
                 bookSeries3: values[5].books,
                 series3Name: values[5].books[0].series.title,
+                lessonList: values[6],
                 loading: false
             })
             
@@ -177,8 +174,9 @@ export default class FindView extends React.Component {
                     series1Name: values[3].books[0].series.title,
                     series2Name: values[4].books[0].series.title,
                     series3Name: values[5].books[0].series.title,
+                    lessonList: values[6],
                 },
-                expires: 1000 * 3600 * 24
+                expires: 1000 * 3600 * 24 * 3
             })
         }).catch(err => { return false })
     }
@@ -192,6 +190,14 @@ export default class FindView extends React.Component {
         const { navigate } = this.props.navigation;
         navigate('ItemDetaillView', { id , type: 'BOOK' })
     }
+
+    handleLessonClick = (href) => {
+        if (!href) {
+            return;
+        }
+        WebBrowser.openBrowserAsync(href)
+    }
+
 }
 
 const styles = StyleSheet.create({

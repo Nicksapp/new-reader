@@ -131,3 +131,11 @@ export function getBookNoteByUser(params) {
         method: 'GET',
     })
 }
+
+// 慕课列表
+export function getMoocList(page=1) {
+    return $http({
+        url: api.getMoocList + '?page=' + page,
+        method: 'GET'
+    })
+}

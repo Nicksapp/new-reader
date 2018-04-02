@@ -48,4 +48,6 @@ export default {
     getBookNote: `${api}/classes/note`,
     // 删除指定笔记
     
+    // 慕课列表
+    getMoocList: `${leanclooud}/mooc`,
 }

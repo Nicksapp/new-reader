@@ -17,6 +17,7 @@ import Collection from '../views/Collection/collection'
 
 import NoteEdit from '../views/Note/noteEdit'
 import NodeDetail from '../views/Note/nodeDetail'
+import ItemTagList from '../views/Detail/itemTagList'
 
 const RootStackNavigator = StackNavigator(
     {
@@ -94,6 +95,16 @@ const RootStackNavigator = StackNavigator(
             screen: NodeDetail,
             navigationOptions: {
                 title: '笔记详情',
+                headerStyle: {
+                    backgroundColor: '#0096ff'
+                },
+                headerTintColor: '#ffffff',
+            },
+        },
+        ItemTagList: {  
+            screen: ItemTagList,
+            navigationOptions: {
+                title: '标签详情',
                 headerStyle: {
                     backgroundColor: '#0096ff'
                 },

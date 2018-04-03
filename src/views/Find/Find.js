@@ -27,7 +27,7 @@ export default class FindView extends React.Component {
             series3Name: '',
             loading: false,
 
-            lessonList: [],
+            // lessonList: [],
         }
     }
 
@@ -65,15 +65,9 @@ export default class FindView extends React.Component {
                     }
                     </ScrollView>
                     
-                    <ScrollView tabLabel="课程" >
-                        {
-                            this.state.loading ? (<Loading />) : (
-                                <LessonFlatItem 
-                                    source={this.state.lessonList}
-                                    onItemClick={this.handleLessonClick}></LessonFlatItem>
-                            )
-                        }
-                    </ScrollView>
+                    <View tabLabel="课程" style={{flex: 1}} >
+                        <LessonFlatItem></LessonFlatItem>
+                    </View>
 
                     <ScrollView tabLabel="电影">
                        {
@@ -139,7 +133,6 @@ export default class FindView extends React.Component {
             getBookBySeries(seriesId1),
             getBookBySeries(seriesId2),
             getBookBySeries(seriesId3),
-            getMoocList(1),
         ]).then(values => {
             values.forEach(res => {
                 if (!res) {
@@ -158,7 +151,6 @@ export default class FindView extends React.Component {
                 series2Name: values[4].books[0].series.title,
                 bookSeries3: values[5].books,
                 series3Name: values[5].books[0].series.title,
-                lessonList: values[6],
                 loading: false
             })
             
@@ -174,7 +166,6 @@ export default class FindView extends React.Component {
                     series1Name: values[3].books[0].series.title,
                     series2Name: values[4].books[0].series.title,
                     series3Name: values[5].books[0].series.title,
-                    lessonList: values[6],
                 },
                 expires: 1000 * 3600 * 24 * 3
             })
@@ -190,14 +181,6 @@ export default class FindView extends React.Component {
         const { navigate } = this.props.navigation;
         navigate('ItemDetaillView', { id , type: 'BOOK' })
     }
-
-    handleLessonClick = (href) => {
-        if (!href) {
-            return;
-        }
-        WebBrowser.openBrowserAsync(href)
-    }
-
 }
 
 const styles = StyleSheet.create({

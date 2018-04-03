@@ -50,4 +50,6 @@ export default {
     
     // 慕课列表
     getMoocList: `${leanclooud}/mooc`,
+    // 电影 tag
+    getMovieBySearch: `${douban}/movie/search`, 
 }

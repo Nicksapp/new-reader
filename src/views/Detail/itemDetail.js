@@ -87,9 +87,9 @@ export default class ItemDetail extends React.Component {
                                     {
                                         this.state.itemDetail.genres.map(item => {
                                             return (
-                                                <View key={item} style={{ paddingTop: 5, paddingBottom: 5, paddingLeft: 10, paddingRight: 10, backgroundColor: '#e6e6e6', margin: 5, borderRadius: 4 }}>
+                                                <TouchableOpacity activeOpacity={0.5} onPress={() => this.handleMovieTagClick(item)} key={item} style={{ paddingTop: 5, paddingBottom: 5, paddingLeft: 10, paddingRight: 10, backgroundColor: '#e6e6e6', margin: 5, borderRadius: 4 }}>
                                                     <Text style={{ color: '#666' }}>{item}</Text>
-                                                </View>
+                                                </TouchableOpacity>
                                             )
                                         })
                                     }
@@ -100,9 +100,9 @@ export default class ItemDetail extends React.Component {
                                     {
                                         this.state.itemDetail.tags.map(item => {
                                             return (
-                                                <View key={item.name} style={{paddingTop: 5, paddingBottom: 5, paddingLeft: 10, paddingRight: 10, backgroundColor: '#e6e6e6',margin: 5,borderRadius: 4}}>
+                                                <TouchableOpacity activeOpacity={0.5} onPress={() => this.handleBookTagClick(item.title)} key={item.name} style={{paddingTop: 5, paddingBottom: 5, paddingLeft: 10, paddingRight: 10, backgroundColor: '#e6e6e6',margin: 5,borderRadius: 4}}>
                                                     <Text style={{color: '#666'}}>{item.title}</Text>
-                                                </View>
+                                                </TouchableOpacity>
                                             )
                                         })
                                     }
@@ -350,6 +350,15 @@ export default class ItemDetail extends React.Component {
             type: 'BOOK'
         }
         navigate('NoteEditModal', { itemInfo })
+    }
+
+    handleBookTagClick = (name='') => {
+        const { navigate } = this.props.navigation;
+        navigate('ItemTagList', { name, type: 'BOOK' })
+    }
+    handleMovieTagClick = (name='') => {
+        const { navigate } = this.props.navigation;
+        navigate('ItemTagList', { name, type: 'MOVIE' })
     }
 } 
 

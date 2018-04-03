@@ -139,3 +139,19 @@ export function getMoocList(page=1) {
         method: 'GET'
     })
 }
+
+// 通过标签获得 book
+export function getBookBySearchTag(tag) {
+    return $http({
+        url: api.getBookBySearch + '?tag=' + tag,
+        method: 'GET',
+    })
+}
+
+// 通过标签获得 movie
+export function getMovieBySearchTag(tag) {
+    return $http({
+        url: api.getMovieBySearch + '?tag=' + tag,
+        method: 'GET',
+    })
+}

@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingBottom: 15,
         paddingTop: 15,
+        borderBottomColor: '#eee',
         borderBottomWidth: .5,
-        borderBottomColor: '#e0e0e0'
     }
 });

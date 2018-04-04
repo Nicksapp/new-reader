@@ -172,8 +172,8 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingBottom: 15,
         paddingTop: 15,
+        borderBottomColor: '#eee',
         borderBottomWidth: .5,
-        borderBottomColor: '#e0e0e0'
     },
     footerStyle: {
         flex: 1,

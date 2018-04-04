@@ -177,8 +177,8 @@ const styles = StyleSheet.create({
         paddingBottom: 15,
         paddingTop: 15,
         borderBottomWidth: .3,
-        borderBottomColor: '#e0e0e0',
-        backgroundColor: '#fff'
+        borderBottomColor: '#eee',
+        borderBottomWidth: .5,
     },
     footerStyle: {
         flex: 1,

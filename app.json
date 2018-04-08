@@ -6,7 +6,7 @@
     "version": "1.0.0",
     "sdkVersion": "25.0.0",
     "orientation": "portrait",
-    "primaryColor": "#ccc",
+    "primaryColor": "#0096ff",
     "icon": "./src/assets/images/ic_launcher.png",
     "splash": {
       "image": "./src/assets/images/ic_launcher-web.png",

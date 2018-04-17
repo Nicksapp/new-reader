@@ -14,6 +14,7 @@ export default function $http(options) {
         'Content-Type': 'application/json',
         'X-LC-Id': 'spWm2GIyW9DqnBkYH0bLqcrk-gzGzoHsz',
         'X-LC-Key': 'PvuLRGKSiPBrFvU1seSpt9MB',
+        'X-LC-Session': options.sessionToken || '',
         // 'accesstoken': token  //用户登陆后返回的token，某些涉及用户数据的接口需要在header中加上token
     };
     const {url, method='GET', params=''} = options;

@@ -20,12 +20,12 @@ export default class ProfileHeader extends React.Component {
                                 </View>
                                 <View style={styles.spaceBetweenSection}>
                                     <Text style={styles.defaultText}>Email: {this.props.loginState.email}</Text>
-                                    <Text style={{ marginRight: 20, color: '#fff' }}>个人主页 > </Text>
+                                    {/* <Text style={{ marginRight: 20, color: '#fff' }}>个人主页 > </Text> */}
                                 </View>
-                                <View style={{ flexDirection: 'row' }}>
+                                {/* <View style={{ flexDirection: 'row' }}>
                                     <Text style={{ marginRight: 20, color: '#fff' }}>关注 0</Text>
                                     <Text style={styles.defaultText}>被关注 0</Text>
-                                </View>
+                                </View> */}
                             </View>
                         </View>
                     ) : (

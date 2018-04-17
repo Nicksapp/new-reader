@@ -24,6 +24,15 @@ export function loginUser(params) {
     })
 }
 
+export function modifyPassword(params,sessionToken,id) {
+    return $http({
+        url: api.modifyPassword + id + '/updatePassword',
+        method: 'PUT',
+        params,
+        sessionToken
+    })
+}
+
 export function getMovieInTheaters() {
     return $http({
         url: api.getMovieInTheaters,
@@ -102,6 +111,23 @@ export function postCollection(params) {
         params
     })
 }
+
+// 删除已收藏的项目
+export function deleteCollection(id) {
+    return $http({
+        url: api.postCollection + '/' + id,
+        method: 'DELETE',
+    })
+}
+
+// 删除笔记
+export function deleteNote(id) {
+    return $http({
+        url: api.postBookNote + '/' + id,
+        method: 'DELETE',
+    })
+}
+
 // chakan收藏项目
 export function getCollection(params) {
     return $http({
@@ -114,6 +140,14 @@ export function postBookNote(params) {
     return $http({
         url: api.postBookNote,
         method: 'POST',
+        params
+    })
+}
+// 修改某本书的笔记
+export function modifyBookNote(params, id) {
+    return $http({
+        url: api.postBookNote + '/' + id,
+        method: 'PUT',
         params
     })
 }

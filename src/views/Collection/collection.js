@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, SectionList, Platform, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { getCollection, getBookNoteByUser } from '../../utils/lib'
+import { getCollection, getBookNoteByUser, deleteCollection, deleteNote } from '../../utils/lib'
 import Loading from '../../components/loading'
 
 export default class Collection extends React.Component {
@@ -21,6 +21,7 @@ export default class Collection extends React.Component {
         return (
             <TouchableOpacity
                 onPress={() => this.handleToViewInfo(section.item)}
+                onLongPress={() => this.handleToDeleteItem(section.item)}
                 activeOpacity={1}
                 style={styles.cellContainer}
                 key={section.item.collection_id}>
@@ -55,8 +56,10 @@ export default class Collection extends React.Component {
             </View>
         )
     }
-
     componentDidMount() {
+        this.initData();
+    }
+    initData() {
         const { title } = this.props.navigation.state.params;
         
         switch (title) {
@@ -107,7 +110,6 @@ export default class Collection extends React.Component {
                                 key: 'a',
                                 data: results
                             }]
-                            console.log(source)
                             this.setState({
                                 source,
                                 loading: false
@@ -135,8 +137,51 @@ export default class Collection extends React.Component {
     
     }
 
-    fetchDataByType(type) {
-        
+    handleToDeleteItem = (dataSource) => {
+        if (!dataSource) {
+            return false;
+        }
+        const { title } = this.props.navigation.state.params;
+        switch(title) {
+            case '收藏': {
+                Alert.alert(
+                    '删除提示',
+                    '是否确认删除该收藏？',
+                    [
+                        { text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                        { text: '确认', onPress: () => {
+                            deleteCollection(dataSource.objectId).then(res=>{
+                                this.initData();
+                            }).catch(err => {
+                                alert(err)
+                            })
+                        } },
+                    ],
+                    { cancelable: false }
+                )
+                break;
+            }
+            case '笔记': { //deleteNote
+                Alert.alert(
+                    '删除提示',
+                    '是否确认删除该笔记？',
+                    [
+                        { text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                        {
+                            text: '确认', onPress: () => {
+                                deleteNote(dataSource.objectId).then(res => {
+                                    this.initData();
+                                }).catch(err => {
+                                    alert(err)
+                                })
+                            }
+                        },
+                    ],
+                    { cancelable: false }
+                )
+                break;
+            }
+        }
     }
 }
 

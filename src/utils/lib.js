@@ -189,3 +189,26 @@ export function getMovieBySearchTag(tag) {
         method: 'GET',
     })
 }
+
+// 收藏课程
+export function postLessonCollection(params) {
+    return $http({
+        url: api.lessonCollection,
+        method: 'POST',
+        params
+    })
+}
+// 查看收藏课程
+export function getLessonCollection(params) {
+    return $http({
+        url: `${api.lessonCollection}?where={"user_id":"${params.user_id}"}`,
+        method: 'GET',
+    })
+}
+// 删除已收藏的课程
+export function deleteLessonCollection(id) {
+    return $http({
+        url: api.lessonCollection + '/' + id,
+        method: 'DELETE',
+    })
+}

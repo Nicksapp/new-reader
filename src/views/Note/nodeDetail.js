@@ -77,11 +77,18 @@ export default class NoteDetail extends React.Component {
                             placeholder="笔记内容"
                             underlineColorAndroid="transparent"></TextInput>
 
-                        <View style={{ marginTop: 20, marginBottom: 20, flexDirection: 'row' }}>
+                        <View style={{ marginTop: 20, marginBottom: 10, flexDirection: 'row' }}>
                             <TouchableOpacity
                                 style={styles.loginBtn}
                                 activeOpacity={1} onPress={() => this.handleModifyNote()}>
                                 <Text style={{ color: '#fff' }}>提交</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <TouchableOpacity
+                                style={styles.cancelBtn}
+                                activeOpacity={1} onPress={() => this.closeModel()}>
+                                <Text style={{ color: '#fff' }}>取消</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -149,7 +156,11 @@ export default class NoteDetail extends React.Component {
             console.log(err)
         })
     } 
-    
+    closeModel = () => {
+        this.setState({
+            modalVisible: false
+        })
+    }
 }
 
 const styles = StyleSheet.create({
@@ -161,6 +172,13 @@ const styles = StyleSheet.create({
     loginBtn: {
         flex: 1,
         backgroundColor: '#0096ff',
+        padding: 13,
+        alignItems: 'center',
+        borderRadius: 5,
+    },
+    cancelBtn: {
+        flex: 1,
+        backgroundColor: '#d5d5d5',
         padding: 13,
         alignItems: 'center',
         borderRadius: 5,

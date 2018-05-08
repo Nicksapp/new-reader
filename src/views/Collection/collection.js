@@ -1,7 +1,15 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, SectionList, Platform, Alert } from 'react-native';
+import { WebBrowser } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
-import { getCollection, getBookNoteByUser, deleteCollection, deleteNote } from '../../utils/lib'
+import {
+    getCollection,
+    getBookNoteByUser,
+    deleteCollection,
+    deleteNote,
+    getLessonCollection,
+    deleteLessonCollection
+} from '../../utils/lib'
 import Loading from '../../components/loading'
 
 export default class Collection extends React.Component {
@@ -122,6 +130,46 @@ export default class Collection extends React.Component {
                 })
                 break;
             }
+            case '课程': {
+                storage.load({
+                    key: 'loginState'
+                }).then(data => {
+                    this.setState({
+                        loading: true
+                    })
+                    if (data && data.objectId) {
+                        const user_id = data.objectId;
+                        getLessonCollection({
+                            user_id
+                        }).then(res => {
+                            const {
+                                results = []
+                            } = res;
+                            for (var i = 0; i < results.length; i++) {
+                                results[i].key = results[i].objectId
+                                results[i].collection_id = results[i].objectId
+                                results[i].img_url = 'https:'+results[i].data.image
+                                results[i].title = results[i].data.title
+                            }
+                            const source = [{
+                                key: 'a',
+                                data: results
+                            }]
+                            console.log(results)
+                            this.setState({
+                                source,
+                                loading: false
+                            })
+                        })
+                    }
+                }).catch(err => {
+                    Alert.alert('请登录后再尝试操作！')
+                    this.setState({
+                        loading: false
+                    })
+                })
+                break;
+            }
             default: this.setState({ loading: false });
         }
     }
@@ -132,7 +180,14 @@ export default class Collection extends React.Component {
         switch(title) {
             case '收藏': navigate('ItemDetaillView', { id: dataSource.collection_id, type: dataSource.type === 'BOOK' ? 'BOOK' : 'MOVIE' }); break;
             case '笔记': navigate('NoteDetail', { dataSource }); break;
-
+            case '课程': {
+                const lessonHref = dataSource.data.href || '';
+                if (!lessonHref) {
+                    return;
+                }
+                WebBrowser.openBrowserAsync(lessonHref);
+                break;
+            }
         }
     
     }
@@ -178,6 +233,30 @@ export default class Collection extends React.Component {
                         },
                     ],
                     { cancelable: false }
+                )
+                break;
+            }
+            case '课程': {
+                Alert.alert(
+                    '删除提示',
+                    '是否确认删除该收藏课程？', [{
+                            text: '取消',
+                            onPress: () => console.log('Cancel Pressed'),
+                            style: 'cancel'
+                        },
+                        {
+                            text: '确认',
+                            onPress: () => {
+                                deleteLessonCollection(dataSource.objectId).then(res => {
+                                    this.initData();
+                                }).catch(err => {
+                                    alert(err)
+                                })
+                            }
+                        },
+                    ], {
+                        cancelable: false
+                    }
                 )
                 break;
             }

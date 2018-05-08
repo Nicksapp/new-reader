@@ -1,8 +1,8 @@
 # 新悦读 New Reader
 
-> Nickj's 的基于 react-native & Expo 开发的原生应用, 面向 android & ios. 
+> 的基于 react-native & Expo 开发的原生应用, 面向 android & ios. 
 > 
-> 课题：新媒体扩展阅读移动端App开发, 18届本科毕业设计.
+> 课题：新媒体扩展阅读移动端App开发.
 
 ## 预览
 

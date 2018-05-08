@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Platform, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Platform, FlatList, ActivityIndicator, Alert } from 'react-native';
 import { WebBrowser } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import PropType from 'prop-types';
 
-import { getMoocList } from '../utils/lib'
+import { getMoocList, postLessonCollection } from '../utils/lib'
 
 export default class LessonFlatItem extends React.PureComponent {
     state = {
@@ -18,6 +18,7 @@ export default class LessonFlatItem extends React.PureComponent {
     _renderItem = ({ item }) => (
         <TouchableOpacity
             activeOpacity={1}
+            onLongPress={() => this.onItemLongClick(item)}
             onPress={() => this.onItemClick(item.href)}
             style={styles.itemCard} key={item.title}>
             <View style={{ flex: 1 }}>
@@ -155,6 +156,43 @@ export default class LessonFlatItem extends React.PureComponent {
             return;
         }
         WebBrowser.openBrowserAsync(href)
+    }
+
+    onItemLongClick = (item) => {
+        let postData = {
+           data: item
+        };
+        Alert.alert(
+            '提示',
+            '是否确认收藏课程？', [{
+                    text: '取消',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel'
+                },
+                {
+                    text: '确认',
+                    onPress: () => {
+                        storage.load({
+                            key: 'loginState'
+                        }).then(data => {
+                            if (data && data.sessionToken) {
+                                postData.user_id = data.objectId;
+                                postData.username = data.username;
+                            }
+                            return postData;
+                        }).then(data => {
+                            postLessonCollection(data).then(res => {
+                                if (res && res.objectId) {
+                                    Alert.alert('课程收藏成功！');
+                                }
+                            }).catch(err => Alert.alert(err))
+                        }).catch(err => Alert.alert('请登录后再尝试操作！'))
+                    }
+                },
+            ], {
+                cancelable: false
+            }
+        )
     }
 }
 

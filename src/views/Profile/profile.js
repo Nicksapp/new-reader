@@ -121,6 +121,13 @@ export default class ProfileView extends React.Component {
                                     <Text style={{ color: '#fff' }}>提交修改</Text>
                                 </TouchableOpacity>
                             </View>
+                            <View style={{ marginBottom: 10, flexDirection: 'row' }}>
+                                <TouchableOpacity
+                                    style={styles.cancelBtn}
+                                    activeOpacity={1} onPress={() => this.closeModel()}>
+                                    <Text style={{ color: '#fff' }}>取消</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </Modal>
 
@@ -192,6 +199,12 @@ export default class ProfileView extends React.Component {
             }).catch(err => Alert.alert(err))
         }).catch(err => Alert.alert('请登录后再尝试操作！'))
     }
+
+    closeModel = () => {
+        this.setState({
+            modalVisible: false
+        });
+    }
 }
 
 const styles = StyleSheet.create({
@@ -247,6 +260,13 @@ const styles = StyleSheet.create({
     loginBtn: {
         flex: 1,
         backgroundColor: '#0096ff',
+        padding: 13,
+        alignItems: 'center',
+        borderRadius: 5,
+    },
+    cancelBtn: {
+        flex: 1,
+        backgroundColor: '#d5d5d5',
         padding: 13,
         alignItems: 'center',
         borderRadius: 5,

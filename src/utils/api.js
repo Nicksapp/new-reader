@@ -17,6 +17,9 @@ export default {
     getCollection: `${api}/classes/collection`,
     // 取消收藏
 
+    // 课程收藏
+    lessonCollection: `${api}/classes/lessoncollection`,
+
     // 正在上映
     getMovieInTheaters: `${douban}/movie/in_theaters`,
     // 即将上映
